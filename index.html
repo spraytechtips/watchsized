@@ -46,7 +46,7 @@
 
     <div class="grid" style="margin-top:12px;">
       <label>
-        Load CSV (headers: brand,model,reference,diameter_mm,l2l_mm,thickness_mm,lug_mm)
+        Load CSV (headers: brand,model,reference,diameter_mm,l2l_mm,thickness_mm,lug_mm,image_url)
         <input id="fileInput" type="file" accept=".csv,.txt" />
         <span class="warn">Works even without a server.</span>
       </label>
@@ -60,7 +60,7 @@
       <div id="stage" class="stage"></div>
       <div class="legend">
         <span>Scale: <b><span id="scalePx">—</span> px/mm</b></span>
-        <span>Viewport: <b>160 mm</b> real width</span>
+        <span>Viewport: <b>200 mm</b> real width</span>
         <span>Wrist width in mm</span>
       </div>
     </div>
@@ -90,10 +90,20 @@
     // Convert mm to inches (for display)
     const mmToIn = (mm)=> (mm/25.4).toFixed(2);
 
+    // --- Helper: Detect if URL is a Google Drive link ---
+    function isGoogleDriveUrl(url) {
+      return url && url.includes('drive.google.com');
+    }
+
+    // --- Helper: Detect if URL is a base64 data URL ---
+    function isBase64DataUrl(url) {
+      return url && url.startsWith('data:image/');
+    }
+
     // --- Google Drive image fetch helper ---
     // Converts Google Drive sharing URL to direct download and fetches as base64
     async function fetchImageAsBase64(url) {
-      if (!url || !url.includes('drive.google.com')) return url;
+      if (!isGoogleDriveUrl(url)) return url;
       // Extract the file ID from various Google Drive URL formats
       const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
       if (!match) return url;
@@ -124,8 +134,8 @@
         brand: r.brand || '',
         model: r.model || '',
         reference: r.reference || '',
-        image: imageUrl, // Keep original URL, we'll convert when loading
-        imageDataUrl: null, // Will store base64 data after fetch
+        image: imageUrl, // Keep original URL
+        imageDataUrl: null, // Will store base64 data after fetch (for Google Drive only)
         diameter_mm: num(r.diameter_mm ?? r.diameter ?? r.case_diameter_mm),
         l2l_mm:      num(r.l2l_mm ?? r.lug_to_lug_mm ?? r.lug_to_lug),
         thickness_mm:num(r.thickness_mm ?? r.thickness),
@@ -183,9 +193,9 @@
         if(res.ok){
           const text = await res.text();
           const rows = parseCSV(text).map(normalizeRow).filter(v=>v.diameter_mm && v.l2l_mm);
-          // Pre-load all images as base64
+          // Only pre-load Google Drive images as base64
           for(const row of rows) {
-            if(row.image && row.image.includes('drive.google.com')) {
+            if(isGoogleDriveUrl(row.image)) {
               row.imageDataUrl = await fetchImageAsBase64(row.image);
             }
           }
@@ -197,9 +207,9 @@
         if(res.ok){
           const json = await res.json();
           const rows = json.map(normalizeRow).filter(v=>v.diameter_mm && v.l2l_mm);
-          // Pre-load all images as base64
+          // Only pre-load Google Drive images as base64
           for(const row of rows) {
-            if(row.image && row.image.includes('drive.google.com')) {
+            if(isGoogleDriveUrl(row.image)) {
               row.imageDataUrl = await fetchImageAsBase64(row.image);
             }
           }
@@ -225,25 +235,51 @@
       watchDiv.style.overflow = 'hidden';
       watchDiv.style.backgroundColor = '#000000';
       watchDiv.style.border = '1px solid #000000';
-      // Add watch image as iframe (Google Drive preview)
-      if(w.image){
-        const iframe = document.createElement('iframe');
-        const embedUrl = w.image.replace('/view?usp=sharing', '/preview')
-                               .replace('/view', '/preview') + '?rm=minimal';
-        iframe.src = embedUrl;
-        iframe.style.position = 'absolute';
-        iframe.style.top = '0';
-        iframe.style.left = '0';
-        iframe.style.width = '100%';
-        iframe.style.height = '100%';
-        iframe.style.border = 'none';
-        iframe.style.pointerEvents = 'none';
-        iframe.onerror = () => {
-          iframe.remove();
-          watchDiv.style.backgroundColor = '#b7becf';
-        };
-        watchDiv.appendChild(iframe);
+      
+      // Determine image type and render accordingly
+      if(w.image || w.imageDataUrl){
+        const imageUrl = w.imageDataUrl || w.image;
+        
+        // Check if it's a Google Drive URL (use iframe)
+        if(isGoogleDriveUrl(imageUrl)) {
+          const iframe = document.createElement('iframe');
+          const embedUrl = imageUrl.replace('/view?usp=sharing', '/preview')
+                                 .replace('/view', '/preview') + '?rm=minimal';
+          iframe.src = embedUrl;
+          iframe.style.position = 'absolute';
+          iframe.style.top = '0';
+          iframe.style.left = '0';
+          iframe.style.width = '100%';
+          iframe.style.height = '100%';
+          iframe.style.border = 'none';
+          iframe.style.pointerEvents = 'none';
+          iframe.onerror = () => {
+            iframe.remove();
+            watchDiv.style.backgroundColor = '#b7becf';
+          };
+          watchDiv.appendChild(iframe);
+        } 
+        // For local images and base64, use <img> tag
+        else {
+          const img = document.createElement('img');
+          img.src = imageUrl;
+          img.style.position = 'absolute';
+          img.style.top = '0';
+          img.style.left = '0';
+          img.style.width = '100%';
+          img.style.height = '100%';
+          img.style.objectFit = 'cover';
+          img.style.objectPosition = 'center';
+          img.style.pointerEvents = 'none';
+          img.onerror = () => {
+            img.remove();
+            watchDiv.style.backgroundColor = '#b7becf';
+            console.error('Failed to load image:', imageUrl);
+          };
+          watchDiv.appendChild(img);
+        }
       }
+      
       container.appendChild(watchDiv);
       // Add watch info text below
       const infoDiv = document.createElement('div');
@@ -324,9 +360,9 @@
     async function loadFromCSVText(text){
       const rows = parseCSV(text).map(normalizeRow).filter(v=>v.diameter_mm && v.l2l_mm);
       if(rows.length){
-        // Pre-load images as base64
+        // Only pre-load Google Drive images as base64
         for(const row of rows) {
-          if(row.image && row.image.includes('drive.google.com')) {
+          if(isGoogleDriveUrl(row.image)) {
             row.imageDataUrl = await fetchImageAsBase64(row.image);
           }
         }
