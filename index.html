@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>WatchSized — Local POC</title>
+  <style>
+    :root { --bg:#0b0c10; --card:#111217; --muted:#b3b8c3; --ink:#e8ecf3; }
+    * { box-sizing:border-box }
+    body { margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial; background: radial-gradient(1200px 800px at 80% -10%, #1b1f2a 10%, var(--bg) 60%); color: var(--ink);}
+    .wrap { max-width:1100px; margin:28px auto; padding:16px; }
+    h1 { font-size:22px; margin:0 0 6px; }
+    p.help { color:var(--muted); margin:0 0 18px; }
+    .grid { display:grid; gap:12px; grid-template-columns: 1fr; }
+    @media (min-width:900px){ .grid { grid-template-columns: 1fr 1fr 1fr; } }
+    label { font-size:13px; display:flex; flex-direction:column; gap:6px; }
+    select, input[type="range"], input[type="file"] { background:var(--card); color:var(--ink); border:1px solid #2a2f3d; border-radius:14px; padding:10px 12px; }
+    .card { background:linear-gradient(180deg,#121420,#0f1118); border:1px solid #2a2f3d; border-radius:18px; padding:16px; }
+    .stage { background:linear-gradient(180deg,#0f1118,#0a0c12); border:1px solid #2a2f3d; border-radius:18px; padding:8px; display:grid; place-items:center; min-height:320px; }
+    .badge { display:inline-block; padding:4px 8px; border:1px solid #2a2f3d; border-radius:999px; font-size:11px; color:#b3b8c3; }
+    .legend { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-top:8px; color:#b3b8c3; font-size:12px; }
+    .legend b { color:var(--ink); }
+    .meta { font-size:12px; color:#b3b8c3; }
+    .warn { color:#ffcc88; font-size:12px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>WatchSized — Local Prototype</h1>
+    <p class="help">True-to-scale A/B visualizer. Load a CSV with the picker below or serve the folder (auto-loads watches.csv/json).</p>
+
+    <div class="grid">
+      <label>
+        Left watch
+        <select id="leftSelect"></select>
+      </label>
+      <label>
+        Right watch
+        <select id="rightSelect"></select>
+      </label>
+      <label>
+        Wrist width: <span id="wristLabel" class="badge">54 mm (2.13")</span>
+        <input type="range" id="wristInput" min="40" max="70" step="1" value="40" />
+      </label>
+    </div>
+
+    <div class="grid" style="margin-top:12px;">
+      <label>
+        Load CSV (headers: brand,model,reference,diameter_mm,l2l_mm,thickness_mm,lug_mm)
+        <input id="fileInput" type="file" accept=".csv,.txt" />
+        <span class="warn">Works even without a server.</span>
+      </label>
+      <div class="card">
+        <b style="font-size:13px;">Auto-load (optional)</b>
+        <p class="meta">Run <code>python -m http.server 5500</code> in this folder → open <code>http://localhost:5500/</code>. If <code>watches.csv</code> or <code>watches.json</code> exists, it loads automatically.</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:14px;">
+      <div id="stage" class="stage"></div>
+      <div class="legend">
+        <span>Scale: <b><span id="scalePx">—</span> px/mm</b></span>
+        <span>Viewport: <b>160 mm</b> real width</span>
+        <span>Wrist width in mm</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- Data and constants ---
+    let DATA = [];
+
+    // Fallback watch data if no CSV is loaded
+    const FALLBACK = [
+      { id:'explorer2-226570', brand:'Rolex', model:'Explorer II (226570)', reference:'226570', diameter_mm:42, l2l_mm:50, thickness_mm:12.5, lug_mm:21 },
+      { id:'speedy-pro',       brand:'Omega', model:'Speedmaster Professional', reference:'310.30.42.50.01.002', diameter_mm:42, l2l_mm:48.5, thickness_mm:13.2, lug_mm:20 },
+      { id:'bb54',             brand:'Tudor', model:'Black Bay 54', reference:'79000', diameter_mm:37, l2l_mm:46, thickness_mm:11.2, lug_mm:20 },
+      { id:'santos-medium',    brand:'Cartier', model:'Santos Medium', reference:'WSSA0029', diameter_mm:35, l2l_mm:42, thickness_mm:8.8, lug_mm:20 },
+    ];
+
+    // --- DOM element references ---
+    const leftSel   = document.getElementById('leftSelect'); // Dropdown for left watch
+    const rightSel  = document.getElementById('rightSelect'); // Dropdown for right watch
+    const wristIn   = document.getElementById('wristInput'); // Wrist width slider
+    const wristLbl  = document.getElementById('wristLabel'); // Wrist width label
+    const stage     = document.getElementById('stage');      // Main display area
+    const scalePxEl = document.getElementById('scalePx');    // Scale display
+    const fileInput = document.getElementById('fileInput');  // CSV file input
+
+    // Convert mm to inches (for display)
+    const mmToIn = (mm)=> (mm/25.4).toFixed(2);
+
+    // --- Google Drive image fetch helper ---
+    // Converts Google Drive sharing URL to direct download and fetches as base64
+    async function fetchImageAsBase64(url) {
+      if (!url || !url.includes('drive.google.com')) return url;
+      // Extract the file ID from various Google Drive URL formats
+      const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+      if (!match) return url;
+      const directUrl = `https://drive.google.com/uc?id=${match[1]}&export=download`;
+      try {
+        // Fetch the image using a proxy or direct download
+        const response = await fetch(directUrl);
+        const blob = await response.blob();
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(blob);
+        });
+      } catch (e) {
+        console.error('Failed to load image:', e);
+        return null;
+      }
+    }
+
+    // --- Normalize CSV/JSON row to watch object ---
+    function normalizeRow(r){
+      const id = (r.id && String(r.id)) || `${(r.brand||'').toLowerCase()}-${(r.model||'').toLowerCase().replace(/\s+/g,'-')}`;
+      const num = (v)=> (v===undefined||v===null||v==='') ? null : Number(v);
+      const imageUrl = (r.image || r.image_url || r.img || r.thumbnail || '').trim();
+      return {
+        id,
+        brand: r.brand || '',
+        model: r.model || '',
+        reference: r.reference || '',
+        image: imageUrl, // Keep original URL, we'll convert when loading
+        imageDataUrl: null, // Will store base64 data after fetch
+        diameter_mm: num(r.diameter_mm ?? r.diameter ?? r.case_diameter_mm),
+        l2l_mm:      num(r.l2l_mm ?? r.lug_to_lug_mm ?? r.lug_to_lug),
+        thickness_mm:num(r.thickness_mm ?? r.thickness),
+        lug_mm:      num(r.lug_mm ?? r.lug_width_mm ?? r.lug_width),
+      };
+    }
+
+    // --- Populate dropdowns with watch data ---
+    function populateSelects(data){
+      const opts = data.map(w => ({ value:w.id, label:`${w.brand} — ${w.model}${w.diameter_mm?` (${w.diameter_mm}mm)`:''}` }));
+      for(const sel of [leftSel,rightSel]){
+        sel.innerHTML = '';
+        for(const o of opts){
+          const opt = document.createElement('option');
+          opt.value=o.value;
+          opt.textContent=o.label;
+          sel.appendChild(opt);
+        }
+      }
+      if(data[0]) leftSel.value = data[0].id;
+      if(data[1]) rightSel.value = data[1].id;
+    }
+
+    // --- Simple CSV parser ---
+    function parseCSV(text){
+      const rows=[]; let i=0, field='', row=[], inQ=false;
+      const pushF=()=>{ row.push(field); field=''; };
+      const pushR=()=>{ rows.push(row); row=[]; };
+      while(i<text.length){
+        const c=text[i];
+        if(inQ){
+          if(c==='"'){ if(text[i+1]==='"'){ field+='"'; i++; } else { inQ=false; } }
+          else field+=c;
+        } else {
+          if(c==='"') inQ=true;
+          else if(c===',') pushF();
+          else if(c=='\n' || c=='\r'){ if(c=='\r' && text[i+1]=='\n') i++; pushF(); pushR(); }
+          else field+=c;
+        }
+        i++;
+      }
+      pushF(); if(row.length) pushR();
+      if(!rows.length) return [];
+      const headers = rows[0].map(h=>h.trim());
+      return rows.slice(1).filter(r=>r.length>1).map(r=>{
+        const obj={}; for(let j=0;j<headers.length;j++) obj[headers[j]]=(r[j]||'').trim(); return obj;
+      });
+    }
+
+    // --- Try to auto-load watches.csv or watches.json ---
+    async function tryAutoLoad(){
+      if(location.protocol==='file:') return null;
+      try{
+        const res = await fetch('watches.csv');
+        if(res.ok){
+          const text = await res.text();
+          const rows = parseCSV(text).map(normalizeRow).filter(v=>v.diameter_mm && v.l2l_mm);
+          // Pre-load all images as base64
+          for(const row of rows) {
+            if(row.image && row.image.includes('drive.google.com')) {
+              row.imageDataUrl = await fetchImageAsBase64(row.image);
+            }
+          }
+          if(rows.length) return rows;
+        }
+      }catch(e){}
+      try{
+        const res = await fetch('watches.json');
+        if(res.ok){
+          const json = await res.json();
+          const rows = json.map(normalizeRow).filter(v=>v.diameter_mm && v.l2l_mm);
+          // Pre-load all images as base64
+          for(const row of rows) {
+            if(row.image && row.image.includes('drive.google.com')) {
+              row.imageDataUrl = await fetchImageAsBase64(row.image);
+            }
+          }
+          if(rows.length) return rows;
+        }
+      }catch(e){}
+      return null;
+    }
+
+    // --- Draw a single watch at (x, y) ---
+    function drawWatch(container, w, pxPerMm, x, y){
+      const caseW = w.l2l_mm * pxPerMm;      // Lug-to-lug in px
+      const caseH = w.diameter_mm * pxPerMm; // Diameter in px
+      // Create a square container for the watch
+      const squareSize = Math.max(caseH, caseW);
+      const watchDiv = document.createElement('div');
+      watchDiv.style.position = 'absolute';
+      watchDiv.style.left = `${x-squareSize/2}px`;
+      watchDiv.style.top = `${y-squareSize/2}px`;
+      watchDiv.style.width = `${squareSize}px`;
+      watchDiv.style.height = `${squareSize}px`;
+      watchDiv.style.borderRadius = '1px';
+      watchDiv.style.overflow = 'hidden';
+      watchDiv.style.backgroundColor = '#000000';
+      watchDiv.style.border = '1px solid #000000';
+      // Add watch image as iframe (Google Drive preview)
+      if(w.image){
+        const iframe = document.createElement('iframe');
+        const embedUrl = w.image.replace('/view?usp=sharing', '/preview')
+                               .replace('/view', '/preview') + '?rm=minimal';
+        iframe.src = embedUrl;
+        iframe.style.position = 'absolute';
+        iframe.style.top = '0';
+        iframe.style.left = '0';
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        iframe.style.border = 'none';
+        iframe.style.pointerEvents = 'none';
+        iframe.onerror = () => {
+          iframe.remove();
+          watchDiv.style.backgroundColor = '#b7becf';
+        };
+        watchDiv.appendChild(iframe);
+      }
+      container.appendChild(watchDiv);
+      // Add watch info text below
+      const infoDiv = document.createElement('div');
+      infoDiv.style.position = 'absolute';
+      infoDiv.style.width = '200px';
+      infoDiv.style.left = `${x-100}px`;
+      infoDiv.style.top = `${y-caseW/2-40}px`;
+      infoDiv.style.textAlign = 'center';
+      const nameText = document.createElement('div');
+      nameText.style.color = '#c7ccda';
+      nameText.style.fontSize = '12px';
+      nameText.textContent = `${w.brand} ${w.model}`;
+      const specText = document.createElement('div');
+      specText.style.color = '#8f97ac';
+      specText.style.fontSize = '11px';
+      specText.style.marginTop = '4px';
+      specText.textContent = `${w.diameter_mm}mm • L2L ${w.l2l_mm}mm • ${w.thickness_mm??'—'}mm`;
+      infoDiv.appendChild(nameText);
+      infoDiv.appendChild(specText);
+      container.appendChild(infoDiv);
+    }
+
+    // --- Main render function ---
+    function render(){
+      // Clear previous content
+      while (stage.firstChild) {
+        stage.removeChild(stage.firstChild);
+      }
+      if(!DATA.length){ 
+        stage.innerHTML = '<div class="meta">No watches loaded yet.</div>'; 
+        return; 
+      }
+      // Set up canvas and scaling
+      const rect = stage.getBoundingClientRect();
+      const canvasW = Math.max(900, Math.floor(rect.width-16)); // px width
+      const canvasH = 400; // px height
+      const viewportMm = 200; // mm shown in viewport
+      const pxPerMm = canvasW / viewportMm; // px per mm
+      scalePxEl.textContent = pxPerMm.toFixed(2);
+      // Create main container
+      const container = document.createElement('div');
+      container.style.position = 'relative';
+      container.style.width = `${canvasW}px`;
+      container.style.height = `${canvasH}px`;
+      container.style.background = 'linear-gradient(180deg,#000000,#000000)';
+      container.style.borderRadius = '18px';
+      // Center coordinates
+      const cx = canvasW/2, cy = canvasH/2;
+      // --- Wrist rectangle ---
+      // Get wrist width from slider (mm)
+      const wristWidth = parseInt(wristIn.value, 10);
+      // Convert wrist width to px
+      const wristWidthPx = wristWidth * pxPerMm;
+      // Calculate wrist height (for visual shape)
+      const wristHeightPx = wristWidthPx;
+      // Create and position wrist rectangle
+      const wrist = document.createElement('div');
+      wrist.style.position = 'absolute';
+      wrist.style.left = `${cx - wristWidthPx/2}px`;
+      wrist.style.top = `${cy - wristHeightPx/2}px`;
+      wrist.style.width = `${wristWidthPx}px`;
+      wrist.style.height = `${wristHeightPx}px`; // Scales with wrist width for natural shape
+      wrist.style.backgroundColor = '#262c3a';
+      wrist.style.transition = 'all 0.1s ease-out';
+      container.appendChild(wrist);
+      // --- Draw watches ---
+      const left = DATA.find(d=>d.id===leftSel.value) || DATA[0];
+      const right = DATA.find(d=>d.id===rightSel.value) || DATA[1] || DATA[0];
+      const gap = Math.min(200, canvasW*0.18); // px gap between watches
+      drawWatch(container, left, pxPerMm, cx-gap, cy);
+      drawWatch(container, right, pxPerMm, cx+gap, cy);
+      // Add container to stage and update label
+      stage.appendChild(container);
+      wristLbl.textContent = `${wristWidth} mm (${mmToIn(wristWidth)}")`;
+    }
+
+    // --- Load watches from CSV text ---
+    async function loadFromCSVText(text){
+      const rows = parseCSV(text).map(normalizeRow).filter(v=>v.diameter_mm && v.l2l_mm);
+      if(rows.length){
+        // Pre-load images as base64
+        for(const row of rows) {
+          if(row.image && row.image.includes('drive.google.com')) {
+            row.imageDataUrl = await fetchImageAsBase64(row.image);
+          }
+        }
+        DATA = rows;
+        populateSelects(DATA);
+        render();
+      } else alert('No usable rows found. Check headers & values.');
+    }
+
+    // --- Event listeners ---
+    leftSel.addEventListener('change', render);      // Change left watch
+    rightSel.addEventListener('change', render);     // Change right watch
+    wristIn.addEventListener('input', render);       // Change wrist width
+    window.addEventListener('resize', render);       // Window resize
+    fileInput.addEventListener('change', async (e)=>{ // Load CSV
+      const f=e.target.files?.[0]; if(!f) return; const txt=await f.text(); loadFromCSVText(txt); });
+
+    // --- Initial load ---
+    (async function init(){
+      const served = await tryAutoLoad();
+      DATA = (served && served.length) ? served : FALLBACK;
+      populateSelects(DATA);
+      render();
+    })();
+  </script>
+</body>
+</html>
