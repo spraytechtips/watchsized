@@ -1,31 +1,204 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>WatchSized</title>
   <style>
-    :root { --bg:#0b0c10; --card:#111217; --muted:#b3b8c3; --ink:#e8ecf3; }
-    * { box-sizing:border-box }
-    body { margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial; background: radial-gradient(1200px 800px at 80% -10%, #1b1f2a 10%, var(--bg) 60%); color: var(--ink);}
-    .wrap { max-width:1100px; margin:28px auto; padding:16px; }
-    h1 { font-size:22px; margin:0 0 6px; }
-    p.help { color:var(--muted); margin:0 0 18px; }
-    .grid { display:grid; gap:12px; grid-template-columns: 1fr; }
-    @media (min-width:900px){ .grid { grid-template-columns: 1fr 1fr 1fr; } }
-    label { font-size:13px; display:flex; flex-direction:column; gap:6px; }
-    select, input[type="range"], input[type="file"] { background:var(--card); color:var(--ink); border:1px solid #2a2f3d; border-radius:14px; padding:10px 12px; }
-    .card { background:linear-gradient(180deg,#121420,#0f1118); border:1px solid #2a2f3d; border-radius:18px; padding:16px; }
-    .stage { background:linear-gradient(180deg,#0f1118,#0a0c12); border:1px solid #2a2f3d; border-radius:18px; padding:8px; display:grid; place-items:center; min-height:320px; }
-    .badge { display:inline-block; padding:4px 8px; border:1px solid #2a2f3d; border-radius:999px; font-size:11px; color:#b3b8c3; }
-    .legend { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-top:8px; color:#b3b8c3; font-size:12px; }
-    .legend b { color:var(--ink); }
-    .meta { font-size:12px; color:#b3b8c3; }
-    .warn { color:#ffcc88; font-size:12px; }
+    /* Dark Theme (Default) */
+    :root[data-theme="dark"] {
+      --bg: #0b0c10;
+      --card: #111217;
+      --muted: #b3b8c3;
+      --ink: #e8ecf3;
+      --wrist: #262c3a;
+      --warn: #ffcc88;
+      --border: #2a2f3d;
+      --watch-border: rgba(42, 47, 61, 0.5);
+      --watch-error: #b7becf;
+      --container-bg: #000000;
+      --stage-bg-start: #0f1118;
+      --stage-bg-end: #0a0c12;
+      --card-bg-start: #121420;
+      --card-bg-end: #0f1118;
+      --body-gradient-start: #1b1f2a;
+      --body-gradient-end: #0b0c10;
+      --info-name: #c7ccda;
+      --info-spec: #8f97ac;
+    }
+
+    /* Light Theme */
+    :root[data-theme="light"] {
+      --bg: #f8f9fa;
+      --card: #ffffff;
+      --muted: #6c757d;
+      --ink: #212529;
+      --wrist: #e9ecef;
+      --warn: #d97706;
+      --border: #dee2e6;
+      --watch-border: rgba(222, 226, 230, 0.8);
+      --watch-error: #adb5bd;
+      --container-bg: #f8f9fa;
+      --stage-bg-start: #ffffff;
+      --stage-bg-end: #f8f9fa;
+      --card-bg-start: #ffffff;
+      --card-bg-end: #f8f9fa;
+      --body-gradient-start: #e9ecef;
+      --body-gradient-end: #f8f9fa;
+      --info-name: #495057;
+      --info-spec: #6c757d;
+    }
+
+    * { box-sizing: border-box; }
+    
+    body { 
+      margin: 0; 
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial; 
+      background: radial-gradient(1200px 800px at 80% -10%, var(--body-gradient-start) 10%, var(--body-gradient-end) 60%); 
+      color: var(--ink);
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+    
+    .wrap { 
+      max-width: 1100px; 
+      margin: 28px auto; 
+      padding: 16px; 
+      position: relative;
+    }
+    
+    h1 { 
+      font-size: 22px; 
+      margin: 0 0 6px; 
+    }
+    
+    p.help { 
+      color: var(--muted); 
+      margin: 0 0 18px; 
+    }
+    
+    .grid { 
+      display: grid; 
+      gap: 12px; 
+      grid-template-columns: 1fr; 
+    }
+    
+    @media (min-width: 900px) { 
+      .grid { 
+        grid-template-columns: 1fr 1fr 1fr; 
+      } 
+    }
+    
+    label { 
+      font-size: 13px; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 6px; 
+    }
+    
+    select, input[type="range"], input[type="file"] { 
+      background: var(--card); 
+      color: var(--ink); 
+      border: 1px solid var(--border); 
+      border-radius: 14px; 
+      padding: 10px 12px;
+      transition: background 0.3s ease, border 0.3s ease;
+    }
+    
+    .card { 
+      background: linear-gradient(180deg, var(--card-bg-start), var(--card-bg-end)); 
+      border: 1px solid var(--border); 
+      border-radius: 18px; 
+      padding: 16px;
+      transition: background 0.3s ease, border 0.3s ease;
+    }
+    
+    .stage { 
+      background: linear-gradient(180deg, var(--stage-bg-start), var(--stage-bg-end)); 
+      border: 1px solid var(--border); 
+      border-radius: 18px; 
+      padding: 8px; 
+      display: grid; 
+      place-items: center; 
+      min-height: 320px;
+      transition: background 0.3s ease, border 0.3s ease;
+    }
+    
+    .badge { 
+      display: inline-block; 
+      padding: 4px 8px; 
+      border: 1px solid var(--border); 
+      border-radius: 999px; 
+      font-size: 11px; 
+      color: var(--muted);
+      transition: border 0.3s ease, color 0.3s ease;
+    }
+    
+    .legend { 
+      display: flex; 
+      gap: 8px; 
+      flex-wrap: wrap; 
+      justify-content: center; 
+      margin-top: 8px; 
+      color: var(--muted); 
+      font-size: 12px;
+      transition: color 0.3s ease;
+    }
+    
+    .legend b { 
+      color: var(--ink);
+      transition: color 0.3s ease;
+    }
+    
+    .meta { 
+      font-size: 12px; 
+      color: var(--muted);
+      transition: color 0.3s ease;
+    }
+    
+    .warn { 
+      color: var(--warn); 
+      font-size: 12px;
+      transition: color 0.3s ease;
+    }
+
+    /* Theme Toggle Button */
+    .theme-toggle {
+      position: absolute;
+      top: 0;
+      right: 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 20px;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .theme-toggle:hover {
+      transform: scale(1.05);
+      border-color: var(--ink);
+    }
+
+    .theme-icon {
+      display: inline-block;
+      transition: transform 0.3s ease;
+    }
+
+    .theme-toggle:hover .theme-icon {
+      transform: rotate(20deg);
+    }
   </style>
 </head>
 <body>
   <div class="wrap">
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+      <span class="theme-icon" id="themeIcon">🌙</span>
+    </button>
+
     <h1>WatchSized</h1>
     <p class="help">True-to-scale A/B watch comparison tool. Load a CSV or use the auto-loaded data.</p>
 
@@ -52,7 +225,7 @@
       </label>
       <div class="card">
         <b style="font-size:13px;">Image format</b>
-        <p class="meta">Use local images: <code>./images/watch-name.jpg</code> in the image column of your CSV file.</p>
+        <p class="meta">Use local images: <code>./images/watch-name.jpg</code> or <code>.png</code> with transparency.</p>
       </div>
     </div>
 
@@ -67,6 +240,36 @@
   </div>
 
   <script>
+    // --- Helper: Get CSS variable value ---
+    function getColor(varName) {
+      return getComputedStyle(document.documentElement)
+        .getPropertyValue(varName)
+        .trim();
+    }
+
+    // --- Theme Management ---
+    const html = document.documentElement;
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+
+    // Load saved theme or default to dark
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    html.setAttribute('data-theme', savedTheme);
+    themeIcon.textContent = savedTheme === 'dark' ? '🌙' : '☀️';
+
+    // Toggle theme
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = html.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      html.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      themeIcon.textContent = newTheme === 'dark' ? '🌙' : '☀️';
+      
+      // Re-render to update dynamic colors
+      render();
+    });
+
     // --- Data and constants ---
     let DATA = [];
 
@@ -88,12 +291,12 @@
     const fileInput = document.getElementById('fileInput');
 
     // Convert mm to inches (for display)
-    const mmToIn = (mm)=> (mm/25.4).toFixed(2);
+    const mmToIn = (mm) => (mm/25.4).toFixed(2);
 
     // --- Normalize CSV/JSON row to watch object ---
     function normalizeRow(r){
       const id = (r.id && String(r.id)) || `${(r.brand||'').toLowerCase()}-${(r.model||'').toLowerCase().replace(/\s+/g,'-')}`;
-      const num = (v)=> (v===undefined||v===null||v==='') ? null : Number(v);
+      const num = (v) => (v===undefined||v===null||v==='') ? null : Number(v);
       const imageUrl = (r.image || '').trim();
       return {
         id,
@@ -132,10 +335,10 @@
       while(i<text.length){
         const c=text[i];
         if(inQ){
-          if(c==="\""){ if(text[i+1]==="\""){ field+="\""; i++; } else { inQ=false; } }
+          if(c==='"'){ if(text[i+1]==='"'){ field+='"'; i++; } else { inQ=false; } }
           else field+=c;
         } else {
-          if(c==="\"") inQ=true;
+          if(c==='"') inQ=true;
           else if(c===',') pushF();
           else if(c=='\n' || c=='\r'){ if(c=='\r' && text[i+1]=='\n') i++; pushF(); pushR(); }
           else field+=c;
@@ -186,8 +389,8 @@
       watchDiv.style.height = `${squareSize}px`;
       watchDiv.style.borderRadius = '1px';
       watchDiv.style.overflow = 'hidden';
-      watchDiv.style.backgroundColor = '#000000';
-      watchDiv.style.border = '1px solid #000000';
+      watchDiv.style.backgroundColor = 'transparent';
+      watchDiv.style.border = `1px solid ${getColor('--watch-border')}`;
       
       // Add image if available
       if(w.image){
@@ -198,12 +401,12 @@
         img.style.left = '0';
         img.style.width = '100%';
         img.style.height = '100%';
-        img.style.objectFit = 'cover';
+        img.style.objectFit = 'contain';
         img.style.objectPosition = 'center';
         img.style.pointerEvents = 'none';
         img.onerror = () => {
           img.remove();
-          watchDiv.style.backgroundColor = '#b7becf';
+          watchDiv.style.backgroundColor = getColor('--watch-error');
           console.error('Failed to load image:', w.image);
         };
         watchDiv.appendChild(img);
@@ -220,12 +423,12 @@
       infoDiv.style.textAlign = 'center';
       
       const nameText = document.createElement('div');
-      nameText.style.color = '#c7ccda';
+      nameText.style.color = getColor('--info-name');
       nameText.style.fontSize = '12px';
       nameText.textContent = `${w.brand} ${w.model}`;
       
       const specText = document.createElement('div');
-      specText.style.color = '#8f97ac';
+      specText.style.color = getColor('--info-spec');
       specText.style.fontSize = '11px';
       specText.style.marginTop = '4px';
       specText.textContent = `${w.diameter_mm}mm • L2L ${w.l2l_mm}mm • ${w.thickness_mm??'—'}mm`;
@@ -256,7 +459,7 @@
       container.style.position = 'relative';
       container.style.width = `${canvasW}px`;
       container.style.height = `${canvasH}px`;
-      container.style.background = 'linear-gradient(180deg,#000000,#000000)';
+      container.style.background = getColor('--container-bg');
       container.style.borderRadius = '18px';
       
       const cx = canvasW/2, cy = canvasH/2;
@@ -272,7 +475,7 @@
       wrist.style.top = `${cy - wristHeightPx/2}px`;
       wrist.style.width = `${wristWidthPx}px`;
       wrist.style.height = `${wristHeightPx}px`;
-      wrist.style.backgroundColor = '#262c3a';
+      wrist.style.backgroundColor = getColor('--wrist');
       wrist.style.transition = 'all 0.1s ease-out';
       container.appendChild(wrist);
       
