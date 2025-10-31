@@ -200,7 +200,7 @@
     </button>
 
     <h1>WatchSized</h1>
-    <p class="help">True-to-scale A/B watch comparison tool. Load a CSV or use the auto-loaded data.</p>
+    <p class="help">The definitive true-to-scale watch comparison tool.</p>
 
     <div class="grid">
       <label>
@@ -212,21 +212,9 @@
         <select id="rightSelect"></select>
       </label>
       <label>
-        Wrist width: <span id="wristLabel" class="badge">54 mm (2.13")</span>
+        Wrist width: <span id="wristLabel" class="badge">50 mm (1.97")</span>
         <input type="range" id="wristInput" min="40" max="70" step="1" value="40" />
       </label>
-    </div>
-
-    <div class="grid" style="margin-top:12px;">
-      <label>
-        Load CSV (headers: brand,model,reference,diameter_mm,l2l_mm,thickness_mm,lug_mm,image)
-        <input id="fileInput" type="file" accept=".csv,.txt" />
-        <span class="warn">Works even without a server.</span>
-      </label>
-      <div class="card">
-        <b style="font-size:13px;">Image format</b>
-        <p class="meta">Use local images: <code>./images/watch-name.jpg</code> or <code>.png</code> with transparency.</p>
-      </div>
     </div>
 
     <div class="card" style="margin-top:14px;">
