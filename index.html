@@ -260,11 +260,8 @@
 
     /* Theme Toggle Button */
     .theme-toggle {
-
-    /* Theme Toggle Button */
-    .theme-toggle {
       position: absolute;
-      top: 0;
+      top: 16px;
       right: 16px;
       background: var(--card);
       border: 1px solid var(--border);
@@ -546,6 +543,11 @@
       const specText = document.createElement('div');
       specText.style.color = getColor('--info-spec');
       specText.style.fontSize = window.innerWidth < 600 ? '8px' : '11px';
+      specText.style.marginTop = '4px';
+      specText.textContent = `${w.diameter_mm}mm • L2L ${w.l2l_mm}mm • ${w.thickness_mm??'—'}mm`;
+      
+      infoDiv.appendChild(nameText);
+      infoDiv.appendChild(specText);
       
       infoDiv.appendChild(nameText);
       infoDiv.appendChild(specText);
