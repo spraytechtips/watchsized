@@ -214,6 +214,8 @@
       .theme-toggle {
         padding: 6px 10px;
         font-size: 18px;
+        top: 8px;  /* Add this line if it's missing */
+        right: 8px; /* Add this line if it's missing */
       }
 
       .stage {
@@ -346,8 +348,8 @@
       </div>
     </div>
 
-    <footer>
-      <p class="meta" style="margin: 0;">
+    <footer style="text-align: center;">
+      <p class="meta" style="margin: 0; text-align: center;">
         Made by <a href="https://www.instagram.com/spraybottle123/" target="_blank" rel="noopener noreferrer">@spraybottle123</a> on Instagram
       </p>
     </footer>
@@ -538,14 +540,12 @@
       
       const nameText = document.createElement('div');
       nameText.style.color = getColor('--info-name');
-      nameText.style.fontSize = '12px';
+      nameText.style.fontSize = window.innerWidth < 600 ? '9px' : '12px';
       nameText.textContent = `${w.brand} ${w.model}`;
       
       const specText = document.createElement('div');
       specText.style.color = getColor('--info-spec');
-      specText.style.fontSize = '11px';
-      specText.style.marginTop = '4px';
-      specText.textContent = `${w.diameter_mm}mm • L2L ${w.l2l_mm}mm • ${w.thickness_mm??'—'}mm`;
+      specText.style.fontSize = window.innerWidth < 600 ? '8px' : '11px';
       
       infoDiv.appendChild(nameText);
       infoDiv.appendChild(specText);
