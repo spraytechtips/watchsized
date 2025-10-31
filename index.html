@@ -95,7 +95,7 @@
       gap: 6px; 
     }
     
-    select, input[type="range"], input[type="file"] { 
+    select, input[type="range"] { 
       background: var(--card); 
       color: var(--ink); 
       border: 1px solid var(--border); 
@@ -191,6 +191,28 @@
     .theme-toggle:hover .theme-icon {
       transform: rotate(20deg);
     }
+
+    /* Footer styling */
+    footer {
+      margin-top: 24px;
+      text-align: center;
+      padding: 16px;
+      border-top: 1px solid var(--border);
+      transition: border-color 0.3s ease;
+    }
+
+    footer a {
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease, transform 0.2s ease;
+      display: inline-block;
+    }
+
+    footer a:hover {
+      color: var(--warn);
+      transform: translateY(-1px);
+    }
   </style>
 </head>
 <body>
@@ -213,7 +235,7 @@
       </label>
       <label>
         Wrist width: <span id="wristLabel" class="badge">50 mm (1.97")</span>
-        <input type="range" id="wristInput" min="40" max="70" step="1" value="40" />
+        <input type="range" id="wristInput" min="40" max="70" step="1" value="50" />
       </label>
     </div>
 
@@ -225,6 +247,13 @@
         <span>Wrist width in mm</span>
       </div>
     </div>
+
+    <footer>
+      <p class="meta" style="margin: 0;">
+        Made by <a href="https://www.instagram.com/spraybottle123/" target="_blank" rel="noopener noreferrer">@spraybottle123</a> on Instagram
+      </p>
+    </footer>
+
   </div>
 
   <script>
@@ -276,7 +305,6 @@
     const wristLbl  = document.getElementById('wristLabel');
     const stage     = document.getElementById('stage');
     const scalePxEl = document.getElementById('scalePx');
-    const fileInput = document.getElementById('fileInput');
 
     // Convert mm to inches (for display)
     const mmToIn = (mm) => (mm/25.4).toFixed(2);
@@ -378,7 +406,7 @@
       watchDiv.style.borderRadius = '1px';
       watchDiv.style.overflow = 'hidden';
       watchDiv.style.backgroundColor = 'transparent';
-      watchDiv.style.border = '1px solid transparent';
+      watchDiv.style.border = 'none';
       
       // Add image if available
       if(w.image){
@@ -479,29 +507,11 @@
       wristLbl.textContent = `${wristWidth} mm (${mmToIn(wristWidth)}")`;
     }
 
-    // --- Load watches from CSV text ---
-    async function loadFromCSVText(text){
-      const rows = parseCSV(text).map(normalizeRow).filter(v=>v.diameter_mm && v.l2l_mm);
-      if(rows.length){
-        DATA = rows;
-        populateSelects(DATA);
-        render();
-      } else {
-        alert('No usable rows found. Check headers & values.');
-      }
-    }
-
     // --- Event listeners ---
     leftSel.addEventListener('change', render);
     rightSel.addEventListener('change', render);
     wristIn.addEventListener('input', render);
     window.addEventListener('resize', render);
-    fileInput.addEventListener('change', async (e)=>{
-      const f=e.target.files?.[0];
-      if(!f) return;
-      const txt=await f.text();
-      loadFromCSVText(txt);
-    });
 
     // --- Initial load ---
     (async function init(){
