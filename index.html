@@ -87,6 +87,41 @@
       --info-name: #495057;
       --info-spec: #6c757d;
     }
+    /* Request box next to theme toggle */
+    .request-box{
+      position: absolute;
+      top: 16px;          /* matches theme-toggle vertical position */
+      right: 96px;        /* place it to the left of the toggle (adjust if needed) */
+      background: linear-gradient(180deg, var(--card-bg-start), var(--card-bg-end));
+      border: 1px solid var(--border);
+      color: var(--ink);
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-size: 13px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.15s ease, color 0.15s ease, background 0.15s ease;
+      text-decoration: none;
+      white-space: nowrap;
+      z-index: 40;
+    }
+    
+    .request-box:hover{
+      transform: translateY(-2px);
+      color: var(--warn);
+    }
+    @media (max-width: 600px){
+      .request-box{
+        top: 8px;
+        right: 72px; /* reduce spacing on small screens */
+        font-size: 12px;
+        padding: 6px 10px;
+      }
+    }
+
+      
 
     * { box-sizing: border-box; }
     
@@ -318,6 +353,11 @@
       <span class="theme-icon" id="themeIcon">🌙</span>
     </button>
 
+    <!-- Add this HTML right after the existing theme-toggle button (inside .wrap, right after the button element) -->
+    <button class="request-box" id="requestBox" aria-label="Request a watch">
+      Don't see your watch?
+    </button>
+
     <h1>WatchSized</h1>
     <p class="help">The definitive watch size comparison tool.</p>
 
@@ -382,6 +422,16 @@
       
       // Re-render to update dynamic colors
       render();
+    });
+    
+    // Request box behavior
+    const requestBox = document.getElementById('requestBox');
+    // Put your form URL here:
+    const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSd3f9YDYPTN9tm9t6k95sJL1jIQgCmp-1iMhIazfrWkmHoKag/viewform?usp=sharing&ouid=112511788074975319696';
+
+    requestBox.addEventListener('click', ()=>{
+    // Open the form in a new tab
+    window.open(formUrl, '_blank', 'noopener,noreferrer');
     });
 
     // --- Data and constants ---
