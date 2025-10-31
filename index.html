@@ -196,15 +196,16 @@
     input[type="range"]::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
-      width: 70px;
-      height: 36px;
-      background: var(--ink);
+      width: 60px;
+      height: 32px;
+      background: var(--card);
       border: 2px solid var(--border);
       border-radius: 8px;
       cursor: grab;
       transition: all 0.2s ease;
       position: relative;
       z-index: 3;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
     input[type="range"]::-webkit-slider-thumb:hover {
@@ -218,13 +219,14 @@
     }
 
     input[type="range"]::-moz-range-thumb {
-      width: 70px;
-      height: 36px;
-      background: var(--ink);
+      width: 60px;
+      height: 32px;
+      background: var(--card);
       border: 2px solid var(--border);
       border-radius: 8px;
       cursor: grab;
       transition: all 0.2s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
     input[type="range"]::-moz-range-thumb:hover {
@@ -244,7 +246,7 @@
       top: 50%;
       transform: translateY(-50%);
       font-size: 11px;
-      color: var(--bg);
+      color: var(--ink);
       font-weight: 600;
       pointer-events: none;
       white-space: nowrap;
@@ -255,7 +257,7 @@
       justify-content: center;
       line-height: 1.2;
       transition: none;
-      width: 70px;
+      width: 60px;
       text-align: center;
     }
     
@@ -557,8 +559,8 @@
       
       // Position the text display on the thumb
       const sliderWidth = wristInput.offsetWidth;
-      const thumbWidth = 70;
-      const offset = (percentage / 100) * (sliderWidth - thumbWidth) + (thumbWidth / 2);
+      const thumbWidth = 60;
+      const offset = (percentage / 100) * (sliderWidth - thumbWidth) + 12; // +12 for container padding
       
       wristDisplay.style.left = `${offset}px`;
       
