@@ -87,42 +87,6 @@
       --info-name: #495057;
       --info-spec: #6c757d;
     }
-    /* Request box next to theme toggle */
-    .request-box{
-      position: absolute;
-      top: 16px;          /* matches theme-toggle vertical position */
-      right: 96px;        /* place it to the left of the toggle (adjust if needed) */
-      background: linear-gradient(180deg, var(--card-bg-start), var(--card-bg-end));
-      border: 1px solid var(--border);
-      color: var(--ink);
-      padding: 8px 12px;
-      border-radius: 12px;
-      font-size: 14px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      height: 40px;  /* Match theme toggle height */
-      transition: all 0.3s ease;
-      text-decoration: none;
-      white-space: nowrap;
-      z-index: 40;
-    }
-    
-    .request-box:hover{
-      transform: scale(1.05);
-      color: var(--warn);
-      border-color: var(--ink);
-    }
-    @media (max-width: 600px){
-      .request-box{
-        top: 8px;
-        right: 72px; /* reduce spacing on small screens */
-        font-size: 12px;
-        padding: 6px 10px;
-      }
-    }
-
-      
 
     * { box-sizing: border-box; }
     
@@ -170,7 +134,7 @@
       gap: 6px; 
     }
     
-    select, input[type="range"] { 
+    select { 
       background: var(--card); 
       color: var(--ink); 
       border: 1px solid var(--border); 
@@ -197,95 +161,98 @@
       min-height: 320px;
       transition: background 0.3s ease, border 0.3s ease;
     }
-    
-    .badge { 
-      display: inline-block; 
-      padding: 4px 8px; 
-      border: 1px solid var(--border); 
-      border-radius: 999px; 
-      font-size: 11px; 
-      color: var(--muted);
-      transition: border 0.3s ease, color 0.3s ease;
-    }
 
-    /* Wrist slider redesign */
-    .wrist-slider-container {
+    /* Wrist slider box (outer container like dropdowns) */
+    .wrist-slider-box {
       position: relative;
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 14px;
       padding: 10px 12px;
+      height: 44px;
+      display: flex;
+      align-items: center;
       transition: background 0.3s ease, border 0.3s ease;
     }
 
-    .wrist-display {
-      position: absolute;
-      top: 50%;
-      left: 12px;
-      transform: translateY(-50%);
-      font-size: 13px;
-      color: var(--ink);
-      pointer-events: none;
-      font-weight: 500;
-      z-index: 1;
-    }
-
+    /* The actual slider track (smaller, inside the box) */
     input[type="range"] {
       width: 100%;
-      height: 6px;
-      background: linear-gradient(to right, var(--warn) 0%, var(--warn) 33%, var(--border) 33%, var(--border) 100%);
-      border-radius: 3px;
+      height: 8px;
+      background: var(--border);
+      border-radius: 4px;
       outline: none;
       -webkit-appearance: none;
       appearance: none;
       position: relative;
-      z-index: 2;
       border: none;
       padding: 0;
       margin: 0;
+      cursor: pointer;
     }
 
+    /* Slider thumb (the circle you drag) */
     input[type="range"]::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
-      width: 20px;
-      height: 20px;
+      width: 24px;
+      height: 24px;
       background: var(--ink);
       border: 2px solid var(--border);
       border-radius: 50%;
-      cursor: pointer;
+      cursor: grab;
       transition: all 0.2s ease;
+      position: relative;
+      z-index: 3;
     }
 
     input[type="range"]::-webkit-slider-thumb:hover {
       background: var(--warn);
+      transform: scale(1.15);
+    }
+
+    input[type="range"]::-webkit-slider-thumb:active {
+      cursor: grabbing;
       transform: scale(1.1);
     }
 
     input[type="range"]::-moz-range-thumb {
-      width: 20px;
-      height: 20px;
+      width: 24px;
+      height: 24px;
       background: var(--ink);
       border: 2px solid var(--border);
       border-radius: 50%;
-      cursor: pointer;
+      cursor: grab;
       transition: all 0.2s ease;
     }
 
     input[type="range"]::-moz-range-thumb:hover {
       background: var(--warn);
+      transform: scale(1.15);
+    }
+
+    input[type="range"]::-moz-range-thumb:active {
+      cursor: grabbing;
       transform: scale(1.1);
     }
 
-    @media (max-width: 600px) {
-      .wrist-slider-container {
-        padding: 8px 10px;
-      }
-  
-      .wrist-display {
-        font-size: 12px;
-        left: 10px;
-      }
+    /* Text value displayed on the slider thumb */
+    .wrist-value-display {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 11px;
+      color: var(--ink);
+      font-weight: 600;
+      pointer-events: none;
+      white-space: nowrap;
+      z-index: 4;
+      background: var(--card);
+      padding: 2px 6px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      transition: left 0.1s ease;
     }
     
     .legend { 
@@ -316,62 +283,31 @@
       transition: color 0.3s ease;
     }
 
-    /* Mobile Responsiveness */
-    @media (max-width: 600px) {
-      .wrap {
-        padding: 12px;
-        margin: 16px auto;
-      }
-
-      h1 {
-        font-size: 20px;
-      }
-
-      .theme-toggle {
-        padding: 6px 10px;
-        font-size: 18px;
-        top: 8px;  /* Add this line if it's missing */
-        right: 8px; /* Add this line if it's missing */
-      }
-
-      .stage {
-        min-height: 280px;
-        padding: 4px;
-      }
-
-      .legend {
-        font-size: 10px;
-        gap: 6px;
-      }
-
-      select, input[type="range"] {
-        padding: 8px 10px;
-        font-size: 14px;
-      }
-
-      .grid {
-        gap: 10px;
-      }
-
-      footer {
-        padding: 12px;
-        font-size: 11px;
-      }
+    /* Request box next to theme toggle */
+    .request-box {
+      position: absolute;
+      top: 16px;
+      right: 96px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--ink);
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      height: 40px;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      white-space: nowrap;
+      z-index: 40;
     }
-
-    /* Extra small phones */
-    @media (max-width: 400px) {
-      .wrap {
-        padding: 8px;
-      }
-
-      h1 {
-        font-size: 18px;
-      }
-
-      .stage {
-        min-height: 240px;
-      }
+    
+    .request-box:hover {
+      transform: scale(1.05);
+      color: var(--warn);
+      border-color: var(--ink);
     }
 
     /* Theme Toggle Button */
@@ -389,6 +325,7 @@
       display: flex;
       align-items: center;
       gap: 6px;
+      height: 40px;
     }
 
     .theme-toggle:hover {
@@ -426,6 +363,93 @@
       color: var(--warn);
       transform: translateY(-1px);
     }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 600px) {
+      .wrap {
+        padding: 12px;
+        margin: 16px auto;
+      }
+
+      h1 {
+        font-size: 20px;
+      }
+
+      .request-box {
+        top: 8px;
+        right: 72px;
+        font-size: 12px;
+        padding: 6px 10px;
+        height: 36px;
+      }
+
+      .theme-toggle {
+        padding: 6px 10px;
+        font-size: 18px;
+        top: 8px;
+        right: 8px;
+        height: 36px;
+      }
+
+      .stage {
+        min-height: 280px;
+        padding: 4px;
+      }
+
+      .legend {
+        font-size: 10px;
+        gap: 6px;
+      }
+
+      select {
+        padding: 8px 10px;
+        font-size: 14px;
+      }
+
+      .grid {
+        gap: 10px;
+      }
+
+      footer {
+        padding: 12px;
+        font-size: 11px;
+      }
+
+      .wrist-slider-box {
+        padding: 8px 10px;
+        height: 40px;
+      }
+      
+      .wrist-value-display {
+        font-size: 10px;
+        padding: 1px 4px;
+      }
+      
+      input[type="range"]::-webkit-slider-thumb {
+        width: 20px;
+        height: 20px;
+      }
+      
+      input[type="range"]::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    /* Extra small phones */
+    @media (max-width: 400px) {
+      .wrap {
+        padding: 8px;
+      }
+
+      h1 {
+        font-size: 18px;
+      }
+
+      .stage {
+        min-height: 240px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -434,7 +458,6 @@
       <span class="theme-icon" id="themeIcon">🌙</span>
     </button>
 
-    <!-- Add this HTML right after the existing theme-toggle button (inside .wrap, right after the button element) -->
     <button class="request-box" id="requestBox" aria-label="Request a watch">
       Don't see your watch?
     </button>
@@ -452,9 +475,10 @@
         <select id="rightSelect"></select>
       </label>
       <label>
-        <div class="wrist-slider-container">
+        Wrist size
+        <div class="wrist-slider-box">
           <input type="range" id="wristInput" min="40" max="70" step="1" value="50" />
-          <div class="wrist-display" id="wristDisplay">45 mm (1.77")</div>
+          <div class="wrist-value-display" id="wristDisplay">50 mm (1.97")</div>
         </div>
       </label>
     </div>
@@ -484,14 +508,34 @@
         .trim();
     }
 
-    // Update slider gradient based on value
-    function updateSliderGradient() {
+    // Convert mm to inches (for display)
+    const mmToIn = (mm) => (mm/25.4).toFixed(2);
+
+    // Update slider position and display
+    function updateSliderDisplay() {
       const wristInput = document.getElementById('wristInput');
+      const wristDisplay = document.getElementById('wristDisplay');
+      
+      if (!wristInput || !wristDisplay) return;
+      
       const min = parseInt(wristInput.min, 10);
       const max = parseInt(wristInput.max, 10);
       const val = parseInt(wristInput.value, 10);
+      
+      // Update text
+      wristDisplay.textContent = `${val} mm (${mmToIn(val)}")`;
+      
+      // Calculate percentage for positioning the display
       const percentage = ((val - min) / (max - min)) * 100;
-  
+      
+      // Position the text display on the thumb
+      const sliderWidth = wristInput.offsetWidth;
+      const thumbWidth = 24;
+      const offset = (percentage / 100) * (sliderWidth - thumbWidth) + (thumbWidth / 2);
+      
+      wristDisplay.style.left = `${offset}px`;
+      
+      // Update slider background gradient
       wristInput.style.background = `linear-gradient(to right, var(--warn) 0%, var(--warn) ${percentage}%, var(--border) ${percentage}%, var(--border) 100%)`;
     }
 
@@ -520,12 +564,10 @@
     
     // Request box behavior
     const requestBox = document.getElementById('requestBox');
-    // Put your form URL here:
     const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSd3f9YDYPTN9tm9t6k95sJL1jIQgCmp-1iMhIazfrWkmHoKag/viewform?usp=sharing&ouid=112511788074975319696';
 
     requestBox.addEventListener('click', ()=>{
-    // Open the form in a new tab
-    window.open(formUrl, '_blank', 'noopener,noreferrer');
+      window.open(formUrl, '_blank', 'noopener,noreferrer');
     });
 
     // --- Data and constants ---
@@ -543,12 +585,8 @@
     const leftSel   = document.getElementById('leftSelect');
     const rightSel  = document.getElementById('rightSelect');
     const wristIn   = document.getElementById('wristInput');
-    const wristLbl  = document.getElementById('wristLabel');
     const stage     = document.getElementById('stage');
     const scalePxEl = document.getElementById('scalePx');
-
-    // Convert mm to inches (for display)
-    const mmToIn = (mm) => (mm/25.4).toFixed(2);
 
     // --- Normalize CSV/JSON row to watch object ---
     function normalizeRow(r){
@@ -692,9 +730,6 @@
       
       infoDiv.appendChild(nameText);
       infoDiv.appendChild(specText);
-      
-      infoDiv.appendChild(nameText);
-      infoDiv.appendChild(specText);
       container.appendChild(infoDiv);
     }
 
@@ -748,28 +783,27 @@
       drawWatch(container, right, pxPerMm, cx+gap, cy);
       
       stage.appendChild(container);
-      // Update the display inside the slider
-      const wristDisplay = document.getElementById('wristDisplay');
-      if (wristDisplay) {
-        wristDisplay.textContent = `${wristWidth} mm (${mmToIn(wristWidth)}")`;
-      }
     }
 
     // --- Event listeners ---
     leftSel.addEventListener('change', render);
     rightSel.addEventListener('change', render);
     wristIn.addEventListener('input', () => {
-      updateSliderGradient();
+      updateSliderDisplay();
       render();
     });
-    window.addEventListener('resize', render);
+    
+    window.addEventListener('resize', () => {
+      updateSliderDisplay();
+      render();
+    });
 
     // --- Initial load ---
     (async function init(){
       const served = await tryAutoLoad();
       DATA = (served && served.length) ? served : FALLBACK;
       populateSelects(DATA);
-      updateSliderGradient();  // Add this line
+      updateSliderDisplay();
       render();
     })();
   </script>
