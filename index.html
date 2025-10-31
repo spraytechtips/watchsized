@@ -200,6 +200,65 @@
       transition: color 0.3s ease;
     }
 
+    /* Mobile Responsiveness */
+    @media (max-width: 600px) {
+      .wrap {
+        padding: 12px;
+        margin: 16px auto;
+      }
+
+      h1 {
+        font-size: 20px;
+      }
+
+      .theme-toggle {
+        padding: 6px 10px;
+        font-size: 18px;
+      }
+
+      .stage {
+        min-height: 280px;
+        padding: 4px;
+      }
+
+      .legend {
+        font-size: 10px;
+        gap: 6px;
+      }
+
+      select, input[type="range"] {
+        padding: 8px 10px;
+        font-size: 14px;
+      }
+
+      .grid {
+        gap: 10px;
+      }
+
+      footer {
+        padding: 12px;
+        font-size: 11px;
+      }
+    }
+
+    /* Extra small phones */
+    @media (max-width: 400px) {
+      .wrap {
+        padding: 8px;
+      }
+
+      h1 {
+        font-size: 18px;
+      }
+
+      .stage {
+        min-height: 240px;
+      }
+    }
+
+    /* Theme Toggle Button */
+    .theme-toggle {
+
     /* Theme Toggle Button */
     .theme-toggle {
       position: absolute;
@@ -504,8 +563,8 @@
       }
       
       const rect = stage.getBoundingClientRect();
-      const canvasW = Math.max(900, Math.floor(rect.width-16));
-      const canvasH = 400;
+      const canvasW = Math.max(320, Math.floor(rect.width-16));
+      const canvasH = window.innerWidth < 600 ? 280 : 400;
       const viewportMm = 200;
       const pxPerMm = canvasW / viewportMm;
       scalePxEl.textContent = pxPerMm.toFixed(2);
