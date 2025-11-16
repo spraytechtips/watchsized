@@ -1,27 +1,30 @@
 brand,model,reference,diameter_mm,l2l_mm,thickness_mm,lug_mm,image
-Rolex,Explorer II,226570,42,50,12.5,21,./images/rolex-explorer-ii.png
-Omega,Speedmaster Professional,310.30.42.50.04.001,42,48.5,13.2,20,./images/omega-speedmaster.png
-Tudor,Black Bay 54,79000,37,46,11.2,20,./images/tudor-bb54.png
-Cartier,Santos Medium,WSSA0029,35,42,8.8,20,./images/cartier-santos.png
+
+Audemars Piguet,Royal Oak 41mm,15500ST.OO.1220ST.01,41,50.5,10.4,21,./images/ap-royal-oak-41.png
+Audemars Piguet,Royal Oak 37mm,15450ST.OO.1256ST.01,37,46.7,9.8,20,./images/ap-royal-oak-37.png
+
 Cartier,Santos Large,WSSA0018,39.8,47.5,9.08,22,./images/cartier-santos-large.png
+Cartier,Santos Medium,WSSA0029,35,42,8.8,20,./images/cartier-santos.png
 Cartier,Santos Small,WSSA0082,27,34.5,7.08,15.5,./images/cartier-santos-small.png
-Rolex,Submariner Date,126610LN,41,47.6,12.3,20,./images/rolex-submariner-date.png
-Rolex,GMT-Master II,126710BLNR,40,47.4,12.3,20,./images/rolex-gmt-master-ii.png
-Rolex,Datejust 41,126334,41,47.6,11.9,20,./images/rolex-datejust-41.png
-Rolex,Datejust 36,126234,36,44,11.9,20,./images/rolex-datejust-36.png
-Rolex,Oyster Perpetual 41,124300,41,47.6,11.7,20,./images/rolex-oyster-perpetual-41.png
-Rolex,Oyster Perpetual 36,126000,36,44,11.7,20,./images/rolex-oyster-perpetual-36.png
-Rolex,Day-Date 40,228238,40,47.4,12.2,20,./images/rolex-day-date-40.png
+
 Omega,Seamaster 300M,210.30.42.20.01.001,42,47.5,13.5,20,./images/omega-seamaster-300m.png
 Omega,Seamaster Aqua Terra,220.10.41.21.03.001,41,47,12.6,20,./images/omega-aqua-terra-41.png
 Omega,Seamaster Aqua Terra 38,220.10.38.20.03.001,38,44,12.3,20,./images/omega-aqua-terra-38.png
-Audemars Piguet,Royal Oak 41mm,15500ST.OO.1220ST.01,41,50.5,10.4,21,./images/ap-royal-oak-41.png
-Audemars Piguet,Royal Oak 37mm,15450ST.OO.1256ST.01,37,46.7,9.8,20,./images/ap-royal-oak-37.png
+Omega,Speedmaster Professional,310.30.42.50.04.001,42,48.5,13.2,20,./images/omega-speedmaster.png
+
 Patek Philippe,Nautilus 5711,5711/1A-010,40,44.35,8.3,21,./images/patek-nautilus-5711.png
 Patek Philippe,Aquanaut,5167A-001,40,48,8.1,21,./images/patek-aquanaut.png
 
+Rolex,Datejust 41,126334,41,47.6,11.9,20,./images/rolex-datejust-41.png
+Rolex,Datejust 36,126234,36,44,11.9,20,./images/rolex-datejust-36.png
+Rolex,Day-Date 40,228238,40,47.4,12.2,20,./images/rolex-day-date-40.png
+Rolex,Explorer II,226570,42,50,12.5,21,./images/rolex-explorer-ii.png
+Rolex,GMT-Master II,126710BLNR,40,47.4,12.3,20,./images/rolex-gmt-master-ii.png
+Rolex,Oyster Perpetual 41,124300,41,47.6,11.7,20,./images/rolex-oyster-perpetual-41.png
+Rolex,Oyster Perpetual 36,126000,36,44,11.7,20,./images/rolex-oyster-perpetual-36.png
+Rolex,Submariner Date,126610LN,41,47.6,12.3,20,./images/rolex-submariner-date.png
 
-
-
-
-
+Tudor,Black Bay 54,79000,37,46,11.2,20,./images/tudor-bb54.png
+Tudor,Black Bay 58,79030N,39,47,11.9,20,./images/tudor-bb58.png
+Tudor,Black Bay GMT,79830RB,41,50,14.6,22,./images/tudor-bb-gmt.png
+Tudor,Pelagos,25600TN,42,51.8,14.3,22,./images/tudor-pelagos.png
