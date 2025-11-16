@@ -3,9 +3,16 @@ brand,model,reference,diameter_mm,l2l_mm,thickness_mm,lug_mm,image
 Audemars Piguet,Royal Oak 41mm,15500ST.OO.1220ST.01,41,50.5,10.4,21,./images/ap-royal-oak-41.png
 Audemars Piguet,Royal Oak 37mm,15450ST.OO.1256ST.01,37,46.7,9.8,20,./images/ap-royal-oak-37.png
 
+Breitling,Navitimer 41,A17326211C1A1,41,48.5,12.9,22,./images/breitling-navitimer-41.png
+
 Cartier,Santos Large,WSSA0018,39.8,47.5,9.08,22,./images/cartier-santos-large.png
 Cartier,Santos Medium,WSSA0029,35,42,8.8,20,./images/cartier-santos.png
 Cartier,Santos Small,WSSA0082,27,34.5,7.08,15.5,./images/cartier-santos-small.png
+
+Grand Seiko,SBGA211 Snowflake,SBGA211,41,46.9,12.5,20,./images/grand-seiko-snowflake.png
+Grand Seiko,SBGM221,SBGM221,39.5,46.2,14,19,./images/grand-seiko-sbgm221.png
+
+IWC,Pilot's Watch Mark XX,IW328201,40,47.6,10.8,20,./images/iwc-mark-xx.png
 
 Omega,Seamaster 300M,210.30.42.20.01.001,42,47.5,13.5,20,./images/omega-seamaster-300m.png
 Omega,Seamaster Aqua Terra,220.10.41.21.03.001,41,47,12.6,20,./images/omega-aqua-terra-41.png
@@ -24,7 +31,11 @@ Rolex,Oyster Perpetual 41,124300,41,47.6,11.7,20,./images/rolex-oyster-perpetual
 Rolex,Oyster Perpetual 36,126000,36,44,11.7,20,./images/rolex-oyster-perpetual-36.png
 Rolex,Submariner Date,126610LN,41,47.6,12.3,20,./images/rolex-submariner-date.png
 
+Seiko,SPB143,SPB143,40.5,47.6,13.2,20,./images/seiko-spb143.png
+Seiko,SKX007,SKX007,42,46,13,22,./images/seiko-skx007.png
+
 Tudor,Black Bay 54,79000,37,46,11.2,20,./images/tudor-bb54.png
 Tudor,Black Bay 58,79030N,39,47,11.9,20,./images/tudor-bb58.png
 Tudor,Black Bay GMT,79830RB,41,50,14.6,22,./images/tudor-bb-gmt.png
 Tudor,Pelagos,25600TN,42,51.8,14.3,22,./images/tudor-pelagos.png
+
