@@ -8,7 +8,7 @@ Blancpain,Fifty Fathoms 42,5015-12B30-B52A,42,48.5,14.3,21,./images/blancpain-ff
 
 Breitling,Navitimer 41,A17326211C1A1,41,48.5,12.9,22,./images/breitling-navitimer-41.png
 
-Cartier,Baignoire Mini,WGBA0007,24,31.6,7,12,./images/cartier-baignoire-mini.png
+Cartier,Baignoire Mini,WGBA0007,31.6,24,7,12,./images/cartier-baignoire-mini.png
 Cartier,Santos Large,WSSA0018,39.8,47.5,9.08,22,./images/cartier-santos-large.png
 Cartier,Santos Medium,WSSA0029,35,42,8.8,20,./images/cartier-santos.png
 Cartier,Santos Small,WSSA0082,27,34.5,7.08,15.5,./images/cartier-santos-small.png
@@ -16,26 +16,26 @@ Cartier,Tank Must Large,WSTA0108,33.7,44.8,6.6,22,./images/cartier-tank-must-lar
 Cartier,Tank Must Small,WSTA0135,29.5,39.2,6.6,19,./images/cartier-tank-must-small.png
 
 Casio,F91W,F91W-1,34,38.2,8.5,18,./images/casio-f91w.png
-Casio,Calculator,CA53W-1,34,42,8,18,./images/casio-ca53w.png
+Casio,Calculator,CA53W-1,34,43.2,8,18,./images/casio-ca53w.png
 Casio,CasiOak,GA-2100-1A1,45.4,48.5,11.8,16,./images/casio-ga2100.png
 Casio,G-Shock,GW-M5610U-1,43.2,46.7,12.7,16,./images/casio-gwm5610.png
 
-Grand Seiko,SBGA211 Snowflake,SBGA211,41,46.9,12.5,20,./images/grand-seiko-snowflake.png
-Grand Seiko,SBGM221,SBGM221,39.5,46.2,14,19,./images/grand-seiko-sbgm221.png
+Grand Seiko,SBGA211 Snowflake,SBGA211,41,49,12.5,20,./images/grand-seiko-snowflake.png
+Grand Seiko,SBGM221,SBGM221,39.5,47,14,19,./images/grand-seiko-sbgm221.png
 
-IWC,Pilot's Watch Mark XX,IW328201,40,47.6,10.8,20,./images/iwc-mark-xx.png
+IWC,Pilot's Watch Mark XX,IW328201,40,49,10.8,20,./images/iwc-mark-xx.png
 
-JLC,Reverso Classic Large Small Seconds,Q3858520,45.6,27.4,8.5,20,./images/jlc-reverso-classic-large.png
-JLC,Reverso Classic Medium Thin,Q2548440,40.1,24.4,7.6,19,./images/jlc-reverso-medium.png
-JLC,Reverso Tribute Small Seconds,Q3978480,45.6,27.4,7.6,20,./images/jlc-reverso-tribute.png
+JLC,Reverso Classic Large Small Seconds,Q3858520,46,45.6,8.5,20,./images/jlc-reverso-classic-large.png
+JLC,Reverso Classic Medium Thin,Q2548440,40.1,40,7.6,19,./images/jlc-reverso-medium.png
+JLC,Reverso Tribute Small Seconds,Q3978480,46,45.6,7.6,20,./images/jlc-reverso-tribute.png
 
-Omega,Seamaster 300M,210.30.42.20.01.001,42,47.5,13.5,20,./images/omega-seamaster-300m.png
+Omega,Seamaster 300M,210.30.42.20.01.001,42,50,13.5,20,./images/omega-seamaster-300m.png
 Omega,Seamaster Aqua Terra,220.10.41.21.03.001,41,47,12.6,20,./images/omega-aqua-terra-41.png
 Omega,Seamaster Aqua Terra 38,220.10.38.20.03.001,38,44,12.3,20,./images/omega-aqua-terra-38.png
-Omega,Speedmaster Professional,310.30.42.50.04.001,42,48.5,13.2,20,./images/omega-speedmaster.png
+Omega,Speedmaster Professional,310.30.42.50.04.001,42,47.5,13.2,20,./images/omega-speedmaster.png
 
 Patek Philippe,Nautilus 5711,5711/1A-010,40,44.35,8.3,21,./images/patek-nautilus-5711.png
-Patek Philippe,Aquanaut,5167A-001,40,48,8.1,21,./images/patek-aquanaut.png
+Patek Philippe,Aquanaut,5167A-001,40,46.5,8.1,21,./images/patek-aquanaut.png
 
 Rolex,Datejust 41,126334,41,47.6,11.9,20,./images/rolex-datejust-41.png
 Rolex,Datejust 36,126234,36,44,11.9,20,./images/rolex-datejust-36.png
@@ -53,10 +53,11 @@ Seiko,SKX007,SKX007,42,46,13,22,./images/seiko-skx007.png
 Tudor,Black Bay 54,79000,37,46,11.2,20,./images/tudor-bb54.png
 Tudor,Black Bay 58,79030N,39,47,11.9,20,./images/tudor-bb58.png
 Tudor,Black Bay GMT,79830RB,41,50,14.6,22,./images/tudor-bb-gmt.png
-Tudor,Pelagos,25600TN,42,51.8,14.3,22,./images/tudor-pelagos.png
+Tudor,Pelagos,25600TN,42,50,14.3,22,./images/tudor-pelagos.png
 
 Apple,Watch Series 10 46mm,Series10-46,46,46,11,??,./images/apple-watch-46.png
 Apple,Watch Series 10 42mm,Series10-42,42,42,10.7,??,./images/apple-watch-42.png
 Apple,Watch Ultra 2,Ultra2,49,49,14.4,??,./images/apple-watch-ultra2.png
+
 
 
