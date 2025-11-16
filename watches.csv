@@ -25,9 +25,9 @@ Grand Seiko,SBGM221,SBGM221,39.5,46.2,14,19,./images/grand-seiko-sbgm221.png
 
 IWC,Pilot's Watch Mark XX,IW328201,40,47.6,10.8,20,./images/iwc-mark-xx.png
 
-Jaeger-LeCoultre,Reverso Classic Large Small Seconds,Q3858520,45.6,27.4,8.5,20,./images/jlc-reverso-classic-large.png
-Jaeger-LeCoultre,Reverso Classic Medium Thin,Q2548440,40.1,24.4,7.6,19,./images/jlc-reverso-medium.png
-Jaeger-LeCoultre,Reverso Tribute Small Seconds,Q3978480,45.6,27.4,7.6,20,./images/jlc-reverso-tribute.png
+JLC,Reverso Classic Large Small Seconds,Q3858520,45.6,27.4,8.5,20,./images/jlc-reverso-classic-large.png
+JLC,Reverso Classic Medium Thin,Q2548440,40.1,24.4,7.6,19,./images/jlc-reverso-medium.png
+JLC,Reverso Tribute Small Seconds,Q3978480,45.6,27.4,7.6,20,./images/jlc-reverso-tribute.png
 
 Omega,Seamaster 300M,210.30.42.20.01.001,42,47.5,13.5,20,./images/omega-seamaster-300m.png
 Omega,Seamaster Aqua Terra,220.10.41.21.03.001,41,47,12.6,20,./images/omega-aqua-terra-41.png
@@ -58,3 +58,4 @@ Tudor,Pelagos,25600TN,42,51.8,14.3,22,./images/tudor-pelagos.png
 Apple,Watch Series 10 46mm,Series10-46,46,46,11,??,./images/apple-watch-46.png
 Apple,Watch Series 10 42mm,Series10-42,42,42,10.7,??,./images/apple-watch-42.png
 Apple,Watch Ultra 2,Ultra2,49,49,14.4,??,./images/apple-watch-ultra2.png
+
