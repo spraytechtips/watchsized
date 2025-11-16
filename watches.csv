@@ -1,10 +1,10 @@
 brand,model,reference,diameter_mm,l2l_mm,thickness_mm,lug_mm,image
 
-Audemars Piguet,Royal Oak 41mm,15500ST.OO.1220ST.01,41,50.5,10.4,21,./images/ap-royal-oak-41.png
-Audemars Piguet,Royal Oak 37mm,15450ST.OO.1256ST.01,37,46.7,9.8,20,./images/ap-royal-oak-37.png
+AP,Royal Oak 41mm,15500ST.OO.1220ST.01,41,50.5,10.4,21,./images/ap-royal-oak-41.png
+AP,Royal Oak 37mm,15450ST.OO.1256ST.01,37,46.7,9.8,20,./images/ap-royal-oak-37.png
 
-Blancpain,Fifty Fathoms 45mm,5015-1130-52A,45,50.5,15.4,23,./images/blancpain-ff-45.png
-Blancpain,Fifty Fathoms 42mm,5015-12B30-B52A,42,48.5,14.3,21,./images/blancpain-ff-42.png
+Blancpain,Fifty Fathoms 45,5015-1130-52A,45,50.5,15.4,23,./images/blancpain-ff-45.png
+Blancpain,Fifty Fathoms 42,5015-12B30-B52A,42,48.5,14.3,21,./images/blancpain-ff-42.png
 
 Breitling,Navitimer 41,A17326211C1A1,41,48.5,12.9,22,./images/breitling-navitimer-41.png
 
@@ -58,4 +58,5 @@ Tudor,Pelagos,25600TN,42,51.8,14.3,22,./images/tudor-pelagos.png
 Apple,Watch Series 10 46mm,Series10-46,46,46,11,??,./images/apple-watch-46.png
 Apple,Watch Series 10 42mm,Series10-42,42,42,10.7,??,./images/apple-watch-42.png
 Apple,Watch Ultra 2,Ultra2,49,49,14.4,??,./images/apple-watch-ultra2.png
+
 
