@@ -710,7 +710,7 @@
     // --- Draw a single watch at (x, y) ---
     function drawWatch(container, w, pxPerMm, x, y){
       const caseW = w.l2l_mm * pxPerMm;
-      const caseH = w.diameter_mm * pxPerMm;
+      const caseH = w.l2l_mm * pxPerMm;
       const squareSize = Math.max(caseH, caseW);
       
       const watchDiv = document.createElement('div');
