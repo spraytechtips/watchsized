@@ -12,8 +12,8 @@ Cartier,Baignoire Mini,WGBA0007,31.6,24,7,12,./images/cartier-baignoire-mini.png
 Cartier,Santos Large,WSSA0018,39.8,47.5,9.08,22,./images/cartier-santos-large.png
 Cartier,Santos Medium,WSSA0029,35,42,8.8,20,./images/cartier-santos.png
 Cartier,Santos Small,WSSA0082,27,34.5,7.08,15.5,./images/cartier-santos-small.png
-Cartier,Tank Must Large,WSTA0108,33.7,44.8,6.6,22,./images/cartier-tank-must-large.png
-Cartier,Tank Must Small,WSTA0135,29.5,39.2,6.6,19,./images/cartier-tank-must-small.png
+Cartier,Tank Must Large,WSTA0108,33.7,33.7,6.6,22,./images/cartier-tank-must-large.png
+Cartier,Tank Must Small,WSTA0135,29.5,29.5,6.6,19,./images/cartier-tank-must-small.png
 
 Casio,F91W,F91W-1,34,38.2,8.5,18,./images/casio-f91w.png
 Casio,Calculator,CA53W-1,34,43.2,8,18,./images/casio-ca53w.png
@@ -58,6 +58,7 @@ Tudor,Pelagos,25600TN,42,50,14.3,22,./images/tudor-pelagos.png
 Apple,Watch Series 10 46mm,Series10-46,46,46,11,??,./images/apple-watch-46.png
 Apple,Watch Series 10 42mm,Series10-42,42,42,10.7,??,./images/apple-watch-42.png
 Apple,Watch Ultra 2,Ultra2,49,49,14.4,??,./images/apple-watch-ultra2.png
+
 
 
 
