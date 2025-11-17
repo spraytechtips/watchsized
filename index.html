@@ -131,7 +131,9 @@
     
     @media (min-width: 900px) { 
       .grid { 
-        grid-template-columns: 1fr 1fr 1fr; 
+        grid-template-columns: 1fr 1fr;
+        max-width: 600px;
+        margin: 0 auto;
       } 
     }
     
@@ -169,114 +171,6 @@
       place-items: center; 
       min-height: 320px;
       transition: background 0.3s ease, border 0.3s ease;
-    }
-
-    /* Wrist slider box (outer container like dropdowns) */
-    .wrist-slider-box {
-      position: relative;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 10px 12px;
-      min-height: 42px;
-      display: flex;
-      align-items: center;
-      transition: background 0.3s ease, border 0.3s ease;
-    }
-
-    /* The actual slider track (smaller, inside the box) */
-    input[type="range"] {
-      width: 100%;
-      height: 8px;
-      background: var(--border);
-      border-radius: 4px;
-      outline: none;
-      -webkit-appearance: none;
-      appearance: none;
-      position: relative;
-      border: none;
-      padding: 0;
-      margin: 0;
-      cursor: pointer;
-    }
-
-    /* Slider thumb (the circle you drag) */
-    input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 60px;
-      height: 32px;
-      background: var(--card);
-      border: 2px solid var(--border);
-      border-radius: 8px;
-      cursor: grab;
-      transition: all 0.2s ease;
-      position: relative;
-      z-index: 3;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    }
-
-    input[type="range"]::-webkit-slider-thumb:hover {
-      transform: scale(1.05);
-      border-color: var(--ink);
-    }
-
-    input[type="range"]::-webkit-slider-thumb:active {
-      cursor: grabbing;
-      transform: scale(1.02);
-    }
-
-    input[type="range"]::-moz-range-thumb {
-      width: 60px;
-      height: 32px;
-      background: var(--card);
-      border: 2px solid var(--border);
-      border-radius: 8px;
-      cursor: grab;
-      transition: all 0.2s ease;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    }
-
-    input[type="range"]::-moz-range-thumb:hover {
-      transform: scale(1.05);
-      border-color: var(--ink);
-    }
-
-    input[type="range"]::-moz-range-thumb:active {
-      cursor: grabbing;
-      transform: scale(1.02);
-    }
-
-    /* Text value displayed on the slider thumb */
-    .wrist-value-display {
-      position: absolute;
-      left: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 11px;
-      color: var(--ink);
-      font-weight: 600;
-      pointer-events: none;
-      white-space: nowrap;
-      z-index: 4;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      line-height: 1.2;
-      transition: none;
-      width: 60px;
-      text-align: center;
-    }
-    
-    .wrist-value-display .mm {
-      font-size: 12px;
-      font-weight: 700;
-    }
-    
-    .wrist-value-display .inches {
-      font-size: 9px;
-      opacity: 0.8;
     }
     
     .legend { 
@@ -438,33 +332,6 @@
         padding: 12px;
         font-size: 11px;
       }
-
-      .wrist-slider-box {
-        padding: 8px 10px;
-        min-height: 40px;
-      }
-      
-      .wrist-value-display {
-        font-size: 10px;
-      }
-      
-      .wrist-value-display .mm {
-        font-size: 11px;
-      }
-      
-      .wrist-value-display .inches {
-        font-size: 8px;
-      }
-      
-      input[type="range"]::-webkit-slider-thumb {
-        width: 60px;
-        height: 32px;
-      }
-      
-      input[type="range"]::-moz-range-thumb {
-        width: 60px;
-        height: 32px;
-      }
     }
 
     /* Extra small phones */
@@ -505,16 +372,6 @@
         Right watch
         <select id="rightSelect"></select>
       </label>
-      <label>
-        Wrist size
-        <div class="wrist-slider-box">
-          <input type="range" id="wristInput" min="40" max="70" step="1" value="50" />
-          <div class="wrist-value-display" id="wristDisplay">
-            <span class="mm">50 mm</span>
-            <span class="inches">(1.97")</span>
-          </div>
-        </div>
-      </label>
     </div>
 
     <div class="card" style="margin-top:14px;">
@@ -522,7 +379,6 @@
       <div class="legend">
         <span>Scale: <b><span id="scalePx">—</span> px/mm</b></span>
         <span>Viewport: <b>200 mm</b> real width</span>
-        <span>Wrist width in mm</span>
       </div>
     </div>
 
@@ -540,40 +396,6 @@
       return getComputedStyle(document.documentElement)
         .getPropertyValue(varName)
         .trim();
-    }
-
-    // Convert mm to inches (for display)
-    const mmToIn = (mm) => (mm/25.4).toFixed(2);
-
-    // Update slider position and display
-    function updateSliderDisplay() {
-      const wristInput = document.getElementById('wristInput');
-      const wristDisplay = document.getElementById('wristDisplay');
-      
-      if (!wristInput || !wristDisplay) return;
-      
-      const min = parseInt(wristInput.min, 10);
-      const max = parseInt(wristInput.max, 10);
-      const val = parseInt(wristInput.value, 10);
-      
-      // Update text in the stacked display
-      const mmSpan = wristDisplay.querySelector('.mm');
-      const inchesSpan = wristDisplay.querySelector('.inches');
-      if (mmSpan) mmSpan.textContent = `${val} mm`;
-      if (inchesSpan) inchesSpan.textContent = `(${mmToIn(val)}")`;
-      
-      // Calculate percentage for slider background
-      const percentage = ((val - min) / (max - min)) * 100;
-      
-      // Position the text display on the thumb
-      const sliderWidth = wristInput.offsetWidth;
-      const thumbWidth = 60;
-      const offset = (percentage / 100) * (sliderWidth - thumbWidth) + 12; // +12 for container padding
-      
-      wristDisplay.style.left = `${offset}px`;
-      
-      // Update slider background gradient with theme colors instead of orange
-      wristInput.style.background = `linear-gradient(to right, var(--border) 0%, var(--border) ${percentage}%, var(--border) ${percentage}%, var(--border) 100%)`;
     }
 
     // --- Theme Management ---
@@ -621,7 +443,6 @@
     // --- DOM element references ---
     const leftSel   = document.getElementById('leftSelect');
     const rightSel  = document.getElementById('rightSelect');
-    const wristIn   = document.getElementById('wristInput');
     const stage     = document.getElementById('stage');
     const scalePxEl = document.getElementById('scalePx');
 
@@ -796,21 +617,6 @@
       
       const cx = canvasW/2, cy = canvasH/2;
       
-      // Wrist rectangle
-      const wristWidth = parseInt(wristIn.value, 10);
-      const wristWidthPx = wristWidth * pxPerMm;
-      const wristHeightPx = wristWidthPx;
-      
-      const wrist = document.createElement('div');
-      wrist.style.position = 'absolute';
-      wrist.style.left = `${cx - wristWidthPx/2}px`;
-      wrist.style.top = `${cy - wristHeightPx/2}px`;
-      wrist.style.width = `${wristWidthPx}px`;
-      wrist.style.height = `${wristHeightPx}px`;
-      wrist.style.backgroundColor = getColor('--wrist');
-      wrist.style.transition = 'all 0.1s ease-out';
-      container.appendChild(wrist);
-      
       // Draw watches
       const left = DATA.find(d=>d.id===leftSel.value) || DATA[0];
       const right = DATA.find(d=>d.id===rightSel.value) || DATA[1] || DATA[0];
@@ -825,22 +631,14 @@
     // --- Event listeners ---
     leftSel.addEventListener('change', render);
     rightSel.addEventListener('change', render);
-    wristIn.addEventListener('input', () => {
-      updateSliderDisplay();
-      render();
-    });
     
-    window.addEventListener('resize', () => {
-      updateSliderDisplay();
-      render();
-    });
+    window.addEventListener('resize', render);
 
     // --- Initial load ---
     (async function init(){
       const served = await tryAutoLoad();
       DATA = (served && served.length) ? served : FALLBACK;
       populateSelects(DATA);
-      updateSliderDisplay();
       render();
     })();
   </script>
