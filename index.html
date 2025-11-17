@@ -132,16 +132,24 @@
     @media (min-width: 900px) { 
       .grid { 
         grid-template-columns: 1fr 1fr;
-        max-width: 600px;
+        max-width: 800px;
         margin: 0 auto;
-      } 
+        gap: 80px;
+      }
+      
+      select {
+        text-align: center;
+      }
     }
     
     label { 
       font-size: 13px; 
       display: flex; 
       flex-direction: column; 
-      gap: 6px; 
+      gap: 6px;
+      text-align: center;
+      font-weight: 600;
+      color: var(--muted);
     }
     
     select { 
@@ -151,7 +159,14 @@
       border-radius: 14px; 
       padding: 10px 12px;
       min-height: 42px;
-      transition: background 0.3s ease, border 0.3s ease;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    select:hover {
+      transform: scale(1.05);
+      border-color: var(--ink);
+      color: var(--warn);
     }
     
     .card { 
@@ -572,13 +587,20 @@
       infoDiv.style.position = 'absolute';
       infoDiv.style.width = '200px';
       infoDiv.style.left = `${x-100}px`;
-      infoDiv.style.top = `${y-caseW/2-40}px`;
+      infoDiv.style.top = `${y-caseW/2-50}px`;
       infoDiv.style.textAlign = 'center';
       
-      const nameText = document.createElement('div');
-      nameText.style.color = getColor('--info-name');
-      nameText.style.fontSize = window.innerWidth < 600 ? '9px' : '12px';
-      nameText.textContent = `${w.brand} ${w.model}`;
+      const brandText = document.createElement('div');
+      brandText.style.color = getColor('--info-name');
+      brandText.style.fontSize = window.innerWidth < 600 ? '9px' : '12px';
+      brandText.style.fontWeight = '600';
+      brandText.textContent = w.brand;
+      
+      const modelText = document.createElement('div');
+      modelText.style.color = getColor('--info-name');
+      modelText.style.fontSize = window.innerWidth < 600 ? '9px' : '12px';
+      modelText.style.marginTop = '2px';
+      modelText.textContent = w.model;
       
       const specText = document.createElement('div');
       specText.style.color = getColor('--info-spec');
@@ -586,7 +608,8 @@
       specText.style.marginTop = '4px';
       specText.textContent = `${w.diameter_mm}mm • L2L ${w.l2l_mm}mm • ${w.thickness_mm??'—'}mm`;
       
-      infoDiv.appendChild(nameText);
+      infoDiv.appendChild(brandText);
+      infoDiv.appendChild(modelText);
       infoDiv.appendChild(specText);
       container.appendChild(infoDiv);
     }
@@ -603,7 +626,7 @@
       
       const rect = stage.getBoundingClientRect();
       const canvasW = Math.max(320, Math.floor(rect.width-16));
-      const canvasH = window.innerWidth < 600 ? 280 : 400;
+      const canvasH = window.innerWidth < 600 ? 220 : 400;
       const viewportMm = 200;
       const pxPerMm = canvasW / viewportMm;
       scalePxEl.textContent = pxPerMm.toFixed(2);
@@ -620,7 +643,8 @@
       // Draw watches
       const left = DATA.find(d=>d.id===leftSel.value) || DATA[0];
       const right = DATA.find(d=>d.id===rightSel.value) || DATA[1] || DATA[0];
-      const gap = Math.min(200, canvasW*0.18);
+      // Mobile: keep closer together. Desktop: spread to match 80px dropdown gap
+      const gap = window.innerWidth < 600 ? Math.min(200, canvasW*0.18) : 220;
       
       drawWatch(container, left, pxPerMm, cx-gap, cy);
       drawWatch(container, right, pxPerMm, cx+gap, cy);
