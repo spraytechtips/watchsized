@@ -481,7 +481,7 @@
 
     // --- Populate dropdowns with watch data ---
     function populateSelects(data){
-      const opts = data.map(w => ({ value:w.id, label:`${w.brand} — ${w.model}${w.diameter_mm?` (${w.diameter_mm}mm)`:''}` }));
+      const opts = data.map(w => ({ value:w.id, label:`${w.brand} — ${w.model}` }));
       for(const sel of [leftSel,rightSel]){
         sel.innerHTML = '';
         for(const o of opts){
