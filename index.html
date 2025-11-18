@@ -606,7 +606,7 @@
       specText.style.color = getColor('--info-spec');
       specText.style.fontSize = window.innerWidth < 600 ? '8px' : '11px';
       specText.style.marginTop = '4px';
-      specText.textContent = `${w.diameter_mm}mm • L2L ${w.l2l_mm}mm • ${w.thickness_mm??'—'}mm`;
+      specText.textContent = `Lug-to-Lug: ${w.l2l_mm}mm`;
       
       infoDiv.appendChild(brandText);
       infoDiv.appendChild(modelText);
