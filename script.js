@@ -77,11 +77,6 @@ const rightSel  = document.getElementById('rightSelect');
 const stage     = document.getElementById('stage');
 const scalePxEl = document.getElementById('scalePx');
 
-// --- Helper function to get CSS variable color ---
-function getColor(varName){
-  return getComputedStyle(html).getPropertyValue(varName).trim();
-}
-
 // --- Normalize CSV/JSON row to watch object ---
 function normalizeRow(r){
   const id = (r.id && String(r.id)) || `${(r.brand||'').toLowerCase()}-${(r.model||'').toLowerCase().replace(/\s+/g,'-')}`;
