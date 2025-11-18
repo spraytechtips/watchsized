@@ -188,6 +188,61 @@
       transition: background 0.3s ease, border 0.3s ease;
     }
     
+    /* View mode buttons */
+    .view-buttons {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-top: 12px;
+    }
+    
+    .view-btn {
+      background: var(--card);
+      color: var(--ink);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 16px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+    
+    .view-btn:hover {
+      transform: scale(1.05);
+      border-color: var(--ink);
+      color: var(--warn);
+    }
+    
+    .view-btn.active {
+      background: var(--ink);
+      color: var(--bg);
+      border-color: var(--ink);
+    }
+    
+    /* Swap button for overlapped mode */
+    .swap-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: var(--card);
+      color: var(--ink);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      z-index: 10;
+      display: none;
+    }
+    
+    .swap-btn:hover {
+      transform: scale(1.05);
+      border-color: var(--ink);
+      color: var(--warn);
+    }
+    
     .legend { 
       display: flex; 
       gap: 8px; 
@@ -390,7 +445,13 @@
     </div>
 
     <div class="card" style="margin-top:14px;">
-      <div id="stage" class="stage"></div>
+      <div id="stage" class="stage">
+      </div>
+      <div class="view-buttons">
+        <button class="view-btn active" data-view="side-by-side">Side by Side</button>
+        <button class="view-btn" data-view="touching">Touching</button>
+        <button class="view-btn" data-view="overlapped">Overlapped</button>
+      </div>
       <div class="legend">
         <span>Scale: <b><span id="scalePx">—</span> px/mm</b></span>
         <span>Viewport: <b>200 mm</b> real width</span>
@@ -434,6 +495,22 @@
       
       // Re-render to update dynamic colors
       render();
+    });
+    
+    // --- View Mode Management ---
+    let currentViewMode = 'side-by-side';
+    let watchesSwapped = false;
+    
+    const viewButtons = document.querySelectorAll('.view-btn');
+    
+    viewButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        viewButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentViewMode = btn.dataset.view;
+        watchesSwapped = false; // Reset swap when changing modes
+        render();
+      });
     });
     
     // Request box behavior
@@ -544,7 +621,7 @@
     }
 
     // --- Draw a single watch at (x, y) ---
-    function drawWatch(container, w, pxPerMm, x, y){
+    function drawWatch(container, w, pxPerMm, x, y, textPos = 'top', zIndex = 1, containerWidth = 0){
       const caseW = w.l2l_mm * pxPerMm;
       const caseH = w.l2l_mm * pxPerMm;
       const squareSize = Math.max(caseH, caseW);
@@ -559,6 +636,7 @@
       watchDiv.style.overflow = 'hidden';
       watchDiv.style.backgroundColor = 'transparent';
       watchDiv.style.border = 'none';
+      watchDiv.style.zIndex = zIndex;
       
       // Add image if available
       if(w.image){
@@ -586,9 +664,24 @@
       const infoDiv = document.createElement('div');
       infoDiv.style.position = 'absolute';
       infoDiv.style.width = '200px';
-      infoDiv.style.left = `${x-100}px`;
-      infoDiv.style.top = `${y-caseW/2-50}px`;
-      infoDiv.style.textAlign = 'center';
+      infoDiv.style.zIndex = zIndex + 10;
+      
+      // Position text based on mode
+      if (textPos === 'top') {
+        infoDiv.style.left = `${x-100}px`;
+        infoDiv.style.top = `${y-caseW/2-50}px`;
+        infoDiv.style.textAlign = 'center';
+      } else if (textPos === 'left') {
+        infoDiv.style.width = '120px';
+        infoDiv.style.right = `${containerWidth - (x - caseW/2 - 10)}px`;
+        infoDiv.style.top = `${y-30}px`;
+        infoDiv.style.textAlign = 'right';
+      } else if (textPos === 'right') {
+        infoDiv.style.width = '120px';
+        infoDiv.style.left = `${x + caseW/2 + 10}px`;
+        infoDiv.style.top = `${y-30}px`;
+        infoDiv.style.textAlign = 'left';
+      }
       
       const brandText = document.createElement('div');
       brandText.style.color = getColor('--info-name');
@@ -616,9 +709,8 @@
 
     // --- Main render function ---
     function render(){
-      while (stage.firstChild) {
-        stage.removeChild(stage.firstChild);
-      }
+      stage.innerHTML = '';
+      
       if(!DATA.length){ 
         stage.innerHTML = '<div class="meta">No watches loaded yet.</div>'; 
         return; 
@@ -640,14 +732,42 @@
       
       const cx = canvasW/2, cy = canvasH/2;
       
-      // Draw watches
-      const left = DATA.find(d=>d.id===leftSel.value) || DATA[0];
-      const right = DATA.find(d=>d.id===rightSel.value) || DATA[1] || DATA[0];
-      // Mobile: keep closer together. Desktop: spread to match 80px dropdown gap
-      const gap = window.innerWidth < 600 ? Math.min(200, canvasW*0.18) : 220;
+      // Get watches (potentially swapped)
+      let leftWatch = DATA.find(d=>d.id===leftSel.value) || DATA[0];
+      let rightWatch = DATA.find(d=>d.id===rightSel.value) || DATA[1] || DATA[0];
       
-      drawWatch(container, left, pxPerMm, cx-gap, cy);
-      drawWatch(container, right, pxPerMm, cx+gap, cy);
+      if (watchesSwapped && currentViewMode === 'overlapped') {
+        [leftWatch, rightWatch] = [rightWatch, leftWatch];
+      }
+      
+      // Create and add swap button if in overlapped mode
+      if (currentViewMode === 'overlapped') {
+        const swapButton = document.createElement('button');
+        swapButton.className = 'swap-btn';
+        swapButton.textContent = '⇅ Swap';
+        swapButton.style.display = 'block';
+        swapButton.addEventListener('click', () => {
+          watchesSwapped = !watchesSwapped;
+          render();
+        });
+        container.appendChild(swapButton);
+      }
+      
+      // Draw watches based on view mode
+      if (currentViewMode === 'side-by-side') {
+        const gap = window.innerWidth < 600 ? Math.min(200, canvasW*0.18) : 220;
+        drawWatch(container, leftWatch, pxPerMm, cx-gap, cy, 'top', 1, canvasW);
+        drawWatch(container, rightWatch, pxPerMm, cx+gap, cy, 'top', 1, canvasW);
+      } else if (currentViewMode === 'touching') {
+        const leftSize = Math.max(leftWatch.l2l_mm, leftWatch.diameter_mm) * pxPerMm;
+        const rightSize = Math.max(rightWatch.l2l_mm, rightWatch.diameter_mm) * pxPerMm;
+        const totalWidth = (leftSize + rightSize) / 2;
+        drawWatch(container, leftWatch, pxPerMm, cx - totalWidth / 2, cy, 'left', 1, canvasW);
+        drawWatch(container, rightWatch, pxPerMm, cx + totalWidth / 2, cy, 'right', 1, canvasW);
+      } else if (currentViewMode === 'overlapped') {
+        drawWatch(container, leftWatch, pxPerMm, cx, cy, watchesSwapped ? 'right' : 'left', watchesSwapped ? 2 : 1, canvasW);
+        drawWatch(container, rightWatch, pxPerMm, cx, cy, watchesSwapped ? 'left' : 'right', watchesSwapped ? 1 : 2, canvasW);
+      }
       
       stage.appendChild(container);
     }
