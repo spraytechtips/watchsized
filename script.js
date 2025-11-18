@@ -1,3 +1,10 @@
+// --- Helper: Get CSS variable value ---
+function getColor(varName) {
+  return getComputedStyle(document.documentElement)
+    .getPropertyValue(varName)
+    .trim();
+}
+
 // --- Theme Management ---
 const html = document.documentElement;
 const themeToggle = document.getElementById('themeToggle');

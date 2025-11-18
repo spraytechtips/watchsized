@@ -57,54 +57,53 @@
 </head>
 <body>
   <div class="wrap">
-    <h1>WatchSized</h1>
-    <p class="help">Compare watches side-by-side at true scale</p>
-    
-    <!-- Request Box -->
-    <div id="requestBox" class="request-box">
-      Request a watch
-    </div>
-
-    <!-- Theme Toggle Button -->
-    <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
-      <span id="themeIcon" class="theme-icon">🌙</span>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+      <span class="theme-icon" id="themeIcon">🌙</span>
     </button>
 
-    <div class="card">
-      <div class="grid">
-        <label>
-          LEFT WATCH
-          <select id="leftSelect"></select>
-        </label>
-        <label>
-          RIGHT WATCH
-          <select id="rightSelect"></select>
-        </label>
-      </div>
+    <button class="request-box" id="requestBox" aria-label="Request a watch">
+      Don't see your watch?
+    </button>
+
+    <h1>WatchSized</h1>
+    <p class="help">The definitive watch size comparison tool.</p>
+
+    <div class="grid">
+      <label>
+        Left watch
+        <select id="leftSelect"></select>
+      </label>
+      <label>
+        Right watch
+        <select id="rightSelect"></select>
+      </label>
     </div>
 
-    <div class="card" style="margin-top:12px;">
-      <div class="stage" id="stage">
-        <!-- Swap button -->
-        <button id="swapBtn" class="swap-btn">⇄ Swap</button>
+    <div class="card" style="margin-top:14px;">
+      <div id="stage" class="stage">
+        <button class="swap-btn" id="swapBtn">⇅ Swap</button>
       </div>
       <div class="view-buttons">
-        <button class="view-btn active" data-view="side-by-side">⟷</button>
-        <button class="view-btn" data-view="touching">⟺</button>
-        <button class="view-btn" data-view="overlapped">⊚</button>
+        <button class="view-btn active" data-view="side-by-side">←|　|→</button>
+        <button class="view-btn" data-view="touching">←|→</button>
+        <button class="view-btn" data-view="overlapped">→|←</button>
       </div>
       <div class="legend">
-        <span><b>Scale:</b> <span id="scalePx">0.00</span> px/mm</span>
+        <span>Scale: <b><span id="scalePx">—</span> px/mm</b></span>
+        <span>Viewport: <b>200 mm</b> real width</span>
       </div>
     </div>
 
-    <footer>
-      <a href="https://x.com/spraybottle123" target="_blank" rel="noopener noreferrer">Made by @spraybottle123</a>
+    <footer style="text-align: center;">
+      <p class="meta" style="margin: 0; text-align: center;">
+        Made by <a href="https://www.instagram.com/spraybottle123/" target="_blank" rel="noopener noreferrer">@spraybottle123</a> on Instagram
+      </p>
     </footer>
+
   </div>
 
   <!-- External JavaScript -->
   <script src="script.js"></script>
-  <script async defer data-domain="www.watchsized.online" src="https://analytics.vercel-insights.com/script.js"></script>
+<script async defer data-domain="www.watchsized.online" src="https://analytics.vercel-insights.com/script.js"></script>
 </body>
 </html>
