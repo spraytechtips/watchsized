@@ -326,9 +326,9 @@ function render(){
     drawWatch(container, rightWatch, pxPerMm, cx + totalWidth / 2, cy, 'right', 1, canvasW);
   } else if (currentViewMode === 'overlapped') {
     const gap = window.innerWidth < 600 ? Math.min(200, canvasW*0.18) : 220;
-    // Draw with opacity: back watch at 0.8, front watch at 1.0
+    // Draw with opacity: back watch at 0.55, front watch at 1.0
     // Text positioned at side-by-side X coords but with left/right positioning
-    drawWatch(container, leftWatch, pxPerMm, cx, cy, 'overlapped-left', 1, canvasW, 0.8, cx-gap);
+    drawWatch(container, leftWatch, pxPerMm, cx, cy, 'overlapped-left', 1, canvasW, 0.55, cx-gap);
     drawWatch(container, rightWatch, pxPerMm, cx, cy, 'overlapped-right', 2, canvasW, 1.0, cx+gap);
   }
   
